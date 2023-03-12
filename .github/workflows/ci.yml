@@ -1,0 +1,58 @@
+name: CI
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  formatting:
+    name: Check formatting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          cache: poetry
+          python-version: '3.11'
+      - name: Install dependencies
+        run: poetry install
+      - name: Run black
+        run: poetry run black .
+
+  linting:
+    name: Check lints
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          cache: poetry
+          python-version: '3.11'
+      - name: Install dependencies
+        run: poetry install
+      - name: Check lints
+        run: poetry run ruff .
+
+  typing:
+    name: Check types
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          cache: poetry
+          python-version: '3.11'
+      - name: Install dependencies
+        run: poetry install
+      - name: Run mypy
+        run: poetry run mypy .
