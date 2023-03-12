@@ -1,19 +1,26 @@
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus  # type: ignore
+from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus, LpMaximize  # type: ignore
 
 from optiframe.framework.errors import InfeasibleError
 from optiframe.workflow_engine import Task
 
 
+@dataclass
+class ProblemSettings:
+    name: str
+    sense: LpMinimize | LpMaximize
+
+
 class CreateProblemTask(Task[LpProblem]):
-    def __init__(self):
-        pass
+    problem_settings: ProblemSettings
+
+    def __init__(self, problem_settings: ProblemSettings):
+        self.problem_settings = problem_settings
 
     def execute(self) -> LpProblem:
-        # TODO: Add way to change name and min/max target
-        return LpProblem("optimization_problem", LpMinimize)
+        return LpProblem(self.problem_settings.name, self.problem_settings.sense)
 
 
 class CreateObjectiveTask(Task[LpAffineExpression]):

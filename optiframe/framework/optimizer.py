@@ -4,7 +4,7 @@ import tempfile
 from dataclasses import dataclass
 from typing import Optional, Self, Type, Any
 
-from pulp import LpProblem  # type: ignore
+from pulp import LpProblem, LpMinimize, LpMaximize  # type: ignore
 
 from optiframe.workflow_engine import Step, StepData
 from optiframe.workflow_engine.task import Task
@@ -16,6 +16,7 @@ from .tasks import (
     SolveTask,
     SolveSettings,
     ExtractSolutionObjValueTask,
+    ProblemSettings,
 )
 
 
@@ -27,9 +28,20 @@ class OptimizationPackage:
 
 
 class Optimizer:
+    name: str
+    sense: LpMinimize | LpMaximize
     packages: list[OptimizationPackage]
 
-    def __init__(self):
+    def __init__(self, name: str, sense: LpMinimize | LpMaximize = LpMinimize):
+        """
+        Create a new optimizer.
+
+        :param name: The name of the optimization problem.
+        :param sense: Whether to minimize or maximize the objective.
+        Defaults to minimize.
+        """
+        self.name = name
+        self.sense = sense
         self.packages = []
 
     def add_package(self, package: OptimizationPackage) -> Self:
@@ -58,6 +70,7 @@ class Optimizer:
             .add_step(solve_step)
             .add_step(extract_solution_step)
             .initialize(*data)
+            .add_data(ProblemSettings(name=self.name, sense=self.sense))
         )
         return InitializedOptimizer(workflow)
 
