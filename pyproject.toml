@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "optiframe"
+version = "0.1.0"
+description = "A framework for Mixed Integer Programming"
+authors = ["Tim Jentzsch <optiframe.projects@timjen.net>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
