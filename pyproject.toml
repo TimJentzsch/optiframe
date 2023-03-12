@@ -26,6 +26,13 @@ line-length = 100
 [tool.ruff.per-file-ignores]
 "__init__.py" = ["F401"]
 
+[tool.mypy]
+python_version = "3.11"
+
+[[tool.mypy.overrides]]
+module = "pulp"
+ignore_missing_imports = true
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

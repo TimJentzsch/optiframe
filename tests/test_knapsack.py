@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from pytest import approx
-from pulp import LpProblem, LpAffineExpression, LpVariable, LpBinary, lpSum, LpMaximize  # type: ignore
+from pulp import LpProblem, LpAffineExpression, LpVariable, LpBinary, lpSum, LpMaximize
 
 from optiframe import Task, Optimizer, SolutionObjValue
 from optiframe.framework import OptimizationPackage
