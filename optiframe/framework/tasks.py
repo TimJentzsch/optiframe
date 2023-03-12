@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus
+from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus  # type: ignore
 
 from optiframe.framework.errors import SolveError, SolveErrorReason
 from optiframe.workflow_engine import Task

@@ -4,7 +4,7 @@ import tempfile
 from dataclasses import dataclass
 from typing import Optional, Self, Type, Any
 
-from pulp import LpProblem
+from pulp import LpProblem  # type: ignore
 
 from optiframe.workflow_engine import Step, StepData
 from optiframe.workflow_engine.task import Task
