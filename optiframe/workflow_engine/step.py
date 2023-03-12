@@ -6,18 +6,11 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import Self, Type, Any
 
+from .errors import InjectionError, ScheduleError
 from .task import Task
 
 
 logger = logging.getLogger(__name__)
-
-
-class InjectionError(RuntimeError):
-    pass
-
-
-class ScheduleError(RuntimeError):
-    pass
 
 
 @dataclass
@@ -32,7 +25,7 @@ class TaskDependency:
         return f"{self.param}: {self.annotation.__name__}"
 
 
-# Data which can be injected into an task.
+# Data which can be injected into a task.
 # The keys should be class objects which define the type of the data.
 StepData = dict[Any, Any]
 
