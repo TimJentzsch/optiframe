@@ -36,7 +36,10 @@ class SolveTask(Task[None]):
     solve_settings: SolveSettings
 
     def __init__(
-        self, problem: LpProblem, objective: LpAffineExpression, solve_settings: SolveSettings
+        self,
+        problem: LpProblem,
+        objective: LpAffineExpression,
+        solve_settings: SolveSettings,
     ):
         self.problem = problem
         self.objective = objective

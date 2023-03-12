@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import tempfile
 from dataclasses import dataclass
-from datetime import timedelta
 from typing import Optional, Self, Type, Any
 
 from pulp import LpProblem
