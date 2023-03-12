@@ -1,2 +1,2 @@
-from workflow_engine import Task
-from framework import Optimizer
+from optiframe.workflow_engine import Task
+from optiframe.framework import Optimizer
