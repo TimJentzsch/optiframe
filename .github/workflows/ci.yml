@@ -56,3 +56,20 @@ jobs:
         run: poetry install
       - name: Run mypy
         run: poetry run mypy .
+
+  testing:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          cache: poetry
+          python-version: '3.11'
+      - name: Install dependencies
+        run: poetry install
+      - name: Run pytest
+        run: poetry run pytest .
