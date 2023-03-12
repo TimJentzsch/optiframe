@@ -8,7 +8,7 @@ readme = "README.md"
 repository = "https://github.com/TimJentzsch/optiframe"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11.0rc1"
 pulp = "^2.7.0"
 
 [tool.poetry.group.dev.dependencies]
