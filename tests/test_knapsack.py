@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
 from pytest import approx
-from pulp import LpProblem, LpAffineExpression, LpVariable, LpBinary, lpSum, LpMaximize
+from pulp import LpProblem, LpAffineExpression, LpVariable, LpBinary, lpSum, LpMaximize  # type: ignore
 
 from optiframe import Task, Optimizer, SolutionObjValue
 from optiframe.framework import OptimizationPackage
@@ -42,7 +42,7 @@ class ValidateData(Task[None]):
             assert item in self.data.weights.keys(), f"No weight defined for item {item}"
             assert self.data.weights[item] >= 0, f"The weight for item {item} must be positive"
 
-            assert self.data.max_weight >= 0, f"The maximum weight must be positive"
+            assert self.data.max_weight >= 0, "The maximum weight must be positive"
 
 
 @dataclass
