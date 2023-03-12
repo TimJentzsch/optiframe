@@ -3,7 +3,7 @@ from typing import Any, Optional
 
 from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus  # type: ignore
 
-from optiframe.framework.errors import SolveError, SolveErrorReason
+from optiframe.framework.errors import InfeasibleError
 from optiframe.workflow_engine import Task
 
 
@@ -54,23 +54,23 @@ class SolveTask(Task[None]):
         status = LpStatus[status_code]
 
         if status != "Optimal":
-            raise SolveError(SolveErrorReason.INFEASIBLE)
+            raise InfeasibleError()
 
 
 @dataclass
-class SolutionCost:
-    """The total cost of the solution."""
+class SolutionObjValue:
+    """The objective value of the solution."""
 
-    cost: float
+    objective_value: float
 
 
-class ExtractSolutionCostTask(Task[SolutionCost]):
+class ExtractSolutionObjValueTask(Task[SolutionObjValue]):
     problem: LpProblem
 
     def __init__(self, problem: LpProblem):
         self.problem = problem
 
-    def execute(self) -> SolutionCost:
+    def execute(self) -> SolutionObjValue:
         cost = self.problem.objective.value()
 
-        return SolutionCost(cost)
+        return SolutionObjValue(cost)

@@ -15,7 +15,7 @@ from .tasks import (
     CreateObjectiveTask,
     SolveTask,
     SolveSettings,
-    ExtractSolutionCostTask,
+    ExtractSolutionObjValueTask,
 )
 
 
@@ -40,7 +40,7 @@ class Optimizer:
         validate_step = Step("validate")
         build_mip_step = Step("build_mip").add_task(CreateProblemTask).add_task(CreateObjectiveTask)
         solve_step = Step("solve").add_task(SolveTask)
-        extract_solution_step = Step("extract_solution").add_task(ExtractSolutionCostTask)
+        extract_solution_step = Step("extract_solution").add_task(ExtractSolutionObjValueTask)
 
         for package in self.packages:
             if package.validate is not None:
