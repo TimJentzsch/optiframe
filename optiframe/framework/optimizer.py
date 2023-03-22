@@ -4,7 +4,7 @@ import tempfile
 from dataclasses import dataclass
 from typing import Optional, Self, Type, Any
 
-from pulp import LpProblem, LpMinimize, LpMaximize  # type: ignore
+from pulp import LpProblem, LpMinimize, LpMaximize
 
 from optiframe.workflow_engine import Step, StepData
 from optiframe.workflow_engine.task import Task
@@ -22,9 +22,9 @@ from .tasks import (
 
 @dataclass
 class OptimizationPackage:
-    build_mip: Type[Task]
+    build_mip: Type[Task[Any]]
     validate: Optional[Type[Task[None]]] = None
-    extract_solution: Optional[Type[Task]] = None
+    extract_solution: Optional[Type[Task[Any]]] = None
 
 
 class Optimizer:

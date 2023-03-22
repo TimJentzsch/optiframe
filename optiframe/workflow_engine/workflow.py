@@ -15,7 +15,7 @@ class Workflow:
 
     steps: list[Step]
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.steps = list()
 
     def add_step(self, step: Step) -> Self:

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus, LpMaximize  # type: ignore
+from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus, LpMaximize
 
 from optiframe.framework.errors import InfeasibleError
 from optiframe.workflow_engine import Task
@@ -24,7 +24,7 @@ class CreateProblemTask(Task[LpProblem]):
 
 
 class CreateObjectiveTask(Task[LpAffineExpression]):
-    def __init__(self):
+    def __init__(self) -> None:
         pass
 
     def execute(self) -> LpAffineExpression:

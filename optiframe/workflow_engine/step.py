@@ -18,10 +18,10 @@ class TaskDependency:
     param: str
     annotation: Any
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{self.param}: {self.annotation.__name__}"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return f"{self.param}: {self.annotation.__name__}"
 
 
@@ -39,13 +39,13 @@ class Step:
     """
 
     name: str
-    tasks: list[Type[Task]]
+    tasks: list[Type[Task[Any]]]
 
     def __init__(self, name: str):
         self.name = name
         self.tasks = []
 
-    def add_task(self, task: Type[Task]) -> Self:
+    def add_task(self, task: Type[Task[Any]]) -> Self:
         """
         Register a task to run in this step.
 
@@ -70,7 +70,7 @@ class InitializedStep:
     def name(self) -> str:
         return self.step.name
 
-    def tasks(self) -> list[Type[Task]]:
+    def tasks(self) -> list[Type[Task[Any]]]:
         return self.step.tasks
 
     def execute(self) -> StepData:
@@ -148,13 +148,13 @@ class InitializedStep:
 
         return self.step_data
 
-    def _task_dependencies(self) -> dict[Type[Task], list[TaskDependency]]:
+    def _task_dependencies(self) -> dict[Type[Task[Any]], list[TaskDependency]]:
         """
         Determine which task depends on which type of data.
 
         :return: For each task, a list of its dependencies.
         """
-        dependencies: dict[Type[Task], list[TaskDependency]] = dict()
+        dependencies: dict[Type[Task[Any]], list[TaskDependency]] = dict()
 
         # Collect the dependencies for each task
         for task in self.tasks():

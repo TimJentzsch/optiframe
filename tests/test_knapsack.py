@@ -115,7 +115,7 @@ OPTIMIZER = Optimizer("test_knapsack", sense=LpMaximize).add_package(
 )
 
 
-def test_one_fitting_item():
+def test_one_fitting_item() -> None:
     """There is only one item, which fits into the knapsack."""
     solution = (
         OPTIMIZER.initialize(
@@ -132,7 +132,7 @@ def test_one_fitting_item():
     assert solution[SolutionData].packed_items == ["apple"]
 
 
-def test_two_items_one_fits():
+def test_two_items_one_fits() -> None:
     """There is only one item, which fits into the knapsack."""
     solution = (
         OPTIMIZER.initialize(
