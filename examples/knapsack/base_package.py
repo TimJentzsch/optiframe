@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from pulp import LpVariable, LpProblem, LpAffineExpression, LpBinary, lpSum
+from pulp import LpVariable, LpProblem, LpBinary, lpSum
 
 from optiframe import Task
 from optiframe.framework import OptimizationPackage
@@ -55,12 +55,10 @@ class BaseMipData:
 class BuildBaseMip(Task[BaseMipData]):
     base_data: BaseData
     problem: LpProblem
-    objective: LpAffineExpression
 
-    def __init__(self, base_data: BaseData, problem: LpProblem, objective: LpAffineExpression):
+    def __init__(self, base_data: BaseData, problem: LpProblem):
         self.base_data = base_data
         self.problem = problem
-        self.objective = objective
 
     def execute(self) -> BaseMipData:
         # Pack the item into the knapsack?
@@ -78,7 +76,7 @@ class BuildBaseMip(Task[BaseMipData]):
         )
 
         # Maximize the profit
-        self.objective += lpSum(
+        self.problem.objective += lpSum(
             self.base_data.profits[item] * var_pack_item[item] for item in self.base_data.items
         )
 

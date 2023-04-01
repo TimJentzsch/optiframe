@@ -12,7 +12,6 @@ from optiframe.workflow_engine.workflow import Workflow, InitializedWorkflow
 
 from .tasks import (
     CreateProblemTask,
-    CreateObjectiveTask,
     SolveTask,
     SolveSettings,
     ExtractSolutionObjValueTask,
@@ -50,7 +49,7 @@ class Optimizer:
 
     def initialize(self, *data: Any) -> InitializedOptimizer:
         validate_step = Step("validate")
-        build_mip_step = Step("build_mip").add_task(CreateProblemTask).add_task(CreateObjectiveTask)
+        build_mip_step = Step("build_mip").add_task(CreateProblemTask)
         solve_step = Step("solve").add_task(SolveTask)
         extract_solution_step = Step("extract_solution").add_task(ExtractSolutionObjValueTask)
 
