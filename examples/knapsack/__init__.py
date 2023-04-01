@@ -8,13 +8,18 @@ capacity of the knapsack.
 """
 from pulp import LpMaximize
 
-from .base_package import base_package, BaseData
+from .base_package import BaseData, SolutionData, base_package
 from optiframe import Optimizer, SolutionObjValue, InfeasibleError
+from .conflict_package import conflict_package
+
 
 # An optimizer object to solve the knapsack problem
-from .base_package.extract_solution import SolutionData
+knapsack_optimizer = (
+    Optimizer("knapsack", sense=LpMaximize).add_package(base_package).add_package(conflict_package)
+)
 
-knapsack_optimizer = Optimizer("knapsack", sense=LpMaximize).add_package(base_package)
+
+__all__ = ["knapsack_optimizer"]
 
 
 def demo() -> None:

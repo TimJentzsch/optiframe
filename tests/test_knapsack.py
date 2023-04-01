@@ -2,7 +2,7 @@ from pytest import approx
 
 from examples.knapsack import knapsack_optimizer
 from examples.knapsack.base_package import BaseData
-from examples.knapsack.base_package.extract_solution import SolutionData
+from examples.knapsack.base_package import SolutionData
 from optiframe import SolutionObjValue
 
 

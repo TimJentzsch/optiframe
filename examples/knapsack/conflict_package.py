@@ -2,10 +2,10 @@ from dataclasses import dataclass
 
 from pulp import LpProblem
 
+from examples.knapsack.base_package import BaseMipData
 from optiframe import Task
 from optiframe.framework import OptimizationPackage
-from examples.knapsack import BaseData
-from examples.knapsack.base_package.build_mip import BaseMipData
+from examples.knapsack.base_package import BaseData
 
 
 @dataclass
@@ -64,5 +64,3 @@ class BuildConflictMip(Task[None]):
 
 
 conflict_package = OptimizationPackage(validate=ValidateConflictData, build_mip=BuildConflictMip)
-
-__all__ = ["ConflictData", "conflict_package"]
