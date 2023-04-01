@@ -26,15 +26,11 @@ def demo() -> None:
     )
 
     # Create an optimizer object with both packages
-    knapsack_optimizer = (
-        Optimizer("knapsack", sense=LpMaximize)
-        .add_package(base_package)
-        .add_package(conflict_package)
-    )
+    knapsack_optimizer = Optimizer("knapsack", sense=LpMaximize).add_package(base_package)
 
     # Try to solve the problem
     try:
-        solution = knapsack_optimizer.initialize(data).validate().build_mip().solve()
+        solution = knapsack_optimizer.initialize(data).validate().build_mip().print_mip_and_solve()
     except InfeasibleError:
         print("Failed to find a solution!")
         exit(1)
