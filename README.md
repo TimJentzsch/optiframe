@@ -1,4 +1,4 @@
-# Optiframe
+# Optiframe [![PyPI Version](https://img.shields.io/pypi/v/optiframe)](https://pypi.org/project/optiframe/) [![License](https://img.shields.io/pypi/l/optiframe)](LICENSE)
 
 Optiframe is an **opti**mization **frame**work for writing mixed integer programs (MIPs).
 
