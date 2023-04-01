@@ -118,3 +118,8 @@ class BuiltOptimizer:
         self.workflow.add_data(SolveSettings(solver))
         self.workflow.execute_step(2)
         return self.workflow.execute_step(3)
+
+    def print_mip_and_solve(self, solver: Optional[Any] = None) -> StepData:
+        """Print the description of the MIP and solve it."""
+        print(self.get_lp_string())
+        return self.solve(solver)

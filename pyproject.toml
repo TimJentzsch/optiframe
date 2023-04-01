@@ -6,6 +6,10 @@ authors = ["Tim Jentzsch <optiframe.projects@timjen.net>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/TimJentzsch/optiframe"
+exclude = ["examples", "tests"]
+
+[tool.poetry.scripts]
+knapsack = "examples.knapsack:demo"
 
 [tool.poetry.dependencies]
 python = ">=3.11.0rc1"
