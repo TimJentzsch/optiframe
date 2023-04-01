@@ -9,7 +9,7 @@ repository = "https://github.com/TimJentzsch/optiframe"
 exclude = ["examples", "tests"]
 
 [tool.poetry.scripts]
-"examples/knapsack" = "examples.knapsack:demo"
+knapsack = "examples.knapsack:demo"
 
 [tool.poetry.dependencies]
 python = ">=3.11.0rc1"
