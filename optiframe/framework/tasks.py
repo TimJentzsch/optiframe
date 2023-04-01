@@ -21,18 +21,9 @@ class CreateProblemTask(Task[LpProblem]):
 
     def execute(self) -> LpProblem:
         problem = LpProblem(self.problem_settings.name, self.problem_settings.sense)
+        # Initialize the objective to an empty expression
         problem.setObjective(LpAffineExpression())
         return problem
-
-
-class CreateObjectiveTask(Task[LpAffineExpression]):
-    problem: LpProblem
-
-    def __init__(self, problem: LpProblem) -> None:
-        self.problem = problem
-
-    def execute(self) -> LpAffineExpression:
-        return self.problem.objective
 
 
 @dataclass
@@ -49,17 +40,12 @@ class SolveTask(Task[None]):
     def __init__(
         self,
         problem: LpProblem,
-        objective: LpAffineExpression,
         solve_settings: SolveSettings,
     ):
         self.problem = problem
-        self.objective = objective
         self.solve_settings = solve_settings
 
     def execute(self) -> None:
-        # Add objective to MIP
-        self.problem.setObjective(self.objective)
-
         # Solve the problem
         status_code = self.problem.solve(solver=self.solve_settings.solver)
         status = LpStatus[status_code]
