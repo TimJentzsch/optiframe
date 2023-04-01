@@ -1,3 +1,4 @@
+from pulp import LpMaximize
 from pytest import approx
 
 from examples.knapsack.base_package import BaseData, base_package
@@ -5,7 +6,7 @@ from examples.knapsack.base_package import SolutionData
 from optiframe import SolutionObjValue, Optimizer
 
 
-base_optimizer = Optimizer("knapsack_base").add_package(base_package)
+base_optimizer = Optimizer("knapsack_base", sense=LpMaximize).add_package(base_package)
 
 
 def test_one_fitting_item() -> None:

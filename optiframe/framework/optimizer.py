@@ -122,4 +122,4 @@ class BuiltOptimizer:
     def print_mip_and_solve(self, solver: Optional[Any] = None):
         """Print the description of the MIP and solve it."""
         print(self.get_lp_string())
-        self.solve(solver)
+        return self.solve(solver)

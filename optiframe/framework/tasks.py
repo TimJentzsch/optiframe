@@ -20,15 +20,19 @@ class CreateProblemTask(Task[LpProblem]):
         self.problem_settings = problem_settings
 
     def execute(self) -> LpProblem:
-        return LpProblem(self.problem_settings.name, self.problem_settings.sense)
+        problem = LpProblem(self.problem_settings.name, self.problem_settings.sense)
+        problem.setObjective(LpAffineExpression())
+        return problem
 
 
 class CreateObjectiveTask(Task[LpAffineExpression]):
-    def __init__(self) -> None:
-        pass
+    problem: LpProblem
+
+    def __init__(self, problem: LpProblem) -> None:
+        self.problem = problem
 
     def execute(self) -> LpAffineExpression:
-        return LpAffineExpression()
+        return self.problem.objective
 
 
 @dataclass
