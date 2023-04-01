@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from pulp import LpProblem
 
-from examples.knapsack.base_package import KnapsackData
-from examples.knapsack.base_package.build_mip import MipData
+from examples.knapsack.base_package import BaseData
+from examples.knapsack.base_package.build_mip import BaseMipData
 from optiframe import Task
 
 
@@ -13,11 +13,11 @@ class SolutionData:
 
 
 class ExtractSolution(Task[SolutionData]):
-    data: KnapsackData
-    mip_data: MipData
+    data: BaseData
+    mip_data: BaseMipData
     problem: LpProblem
 
-    def __init__(self, data: KnapsackData, mip_data: MipData, problem: LpProblem):
+    def __init__(self, data: BaseData, mip_data: BaseMipData, problem: LpProblem):
         self.data = data
         self.problem = problem
         self.mip_data = mip_data

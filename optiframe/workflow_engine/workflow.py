@@ -48,7 +48,7 @@ class InitializedWorkflow:
 
     def execute(self) -> StepData:
         for step in self.workflow.steps:
-            # Execute each step sequentially and update the step data
+            # Execute each step sequentially and update the step base_data
             self.step_data = step.initialize(self.step_data).execute()
 
         return self.step_data

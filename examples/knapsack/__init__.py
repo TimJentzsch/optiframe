@@ -8,7 +8,7 @@ capacity of the knapsack.
 """
 from pulp import LpMaximize
 
-from .base_package import base_package, KnapsackData
+from .base_package import base_package, BaseData
 from optiframe import Optimizer, SolutionObjValue, InfeasibleError
 
 # An optimizer object to solve the knapsack problem
@@ -22,7 +22,7 @@ def demo() -> None:
     item_count = 20
 
     # Generate a problem instance with 20 items
-    data = KnapsackData(
+    data = BaseData(
         items=[f"item_{i}" for i in range(item_count)],
         weights={f"item_{i}": i * 20 % 43 for i in range(item_count)},
         profits={f"item_{i}": i + 1 for i in range(item_count)},

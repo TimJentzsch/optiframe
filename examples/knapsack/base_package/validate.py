@@ -1,13 +1,13 @@
-from examples.knapsack.base_package.data import KnapsackData
+from examples.knapsack.base_package.data import BaseData
 from optiframe import Task
 
 
-class ValidateData(Task[None]):
-    """A task to validate that the knapsack data is valid."""
+class ValidateBaseData(Task[None]):
+    """A task to validate that the knapsack base_data is valid."""
 
-    data: KnapsackData
+    data: BaseData
 
-    def __init__(self, data: KnapsackData):
+    def __init__(self, data: BaseData):
         self.data = data
 
     def execute(self) -> None:

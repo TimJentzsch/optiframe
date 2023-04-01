@@ -2,9 +2,9 @@ from dataclasses import dataclass
 
 
 @dataclass
-class KnapsackData:
+class BaseData:
     """
-    The data needed to describe an instance of the knapsack problem.
+    The base_data needed to describe an instance of the knapsack problem.
     """
 
     # The available items

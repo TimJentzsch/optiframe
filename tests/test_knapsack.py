@@ -1,7 +1,7 @@
 from pytest import approx
 
 from examples.knapsack import knapsack_optimizer
-from examples.knapsack.base_package import KnapsackData
+from examples.knapsack.base_package import BaseData
 from examples.knapsack.base_package.extract_solution import SolutionData
 from optiframe import SolutionObjValue
 
@@ -10,7 +10,7 @@ def test_one_fitting_item() -> None:
     """There is only one item, which fits into the knapsack."""
     solution = (
         knapsack_optimizer.initialize(
-            KnapsackData(
+            BaseData(
                 items=["apple"], profits={"apple": 1.0}, weights={"apple": 1.0}, max_weight=1.0
             )
         )
@@ -27,7 +27,7 @@ def test_two_items_one_fits() -> None:
     """There is only one item, which fits into the knapsack."""
     solution = (
         knapsack_optimizer.initialize(
-            KnapsackData(
+            BaseData(
                 items=["apple", "banana"],
                 profits={"apple": 1.0, "banana": 2.0},
                 weights={"apple": 1.0, "banana": 1.0},
