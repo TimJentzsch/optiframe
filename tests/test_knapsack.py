@@ -1,7 +1,7 @@
 from pulp import LpMaximize
 from pytest import approx
 
-from examples.knapsack import conflict_package, ConflictData
+from examples.knapsack.conflict_package import conflict_package, ConflictData
 from examples.knapsack.base_package import BaseData, base_package
 from examples.knapsack.base_package import SolutionData
 from optiframe import SolutionObjValue, Optimizer
@@ -70,7 +70,7 @@ def test_conflict() -> None:
             ),
             ConflictData(
                 conflicts=[("apple", "banana")],
-            )
+            ),
         )
         .validate()
         .build_mip()
