@@ -1,23 +1,28 @@
 from pytest import approx
 
-from examples.knapsack import knapsack_optimizer
-from examples.knapsack.base_package import BaseData
+from examples.knapsack.base_package import BaseData, base_package
 from examples.knapsack.base_package import SolutionData
-from optiframe import SolutionObjValue
+from optiframe import SolutionObjValue, Optimizer
+
+
+base_optimizer = Optimizer("knapsack_base").add_package(base_package)
 
 
 def test_one_fitting_item() -> None:
     """There is only one item, which fits into the knapsack."""
-    solution = (
-        knapsack_optimizer.initialize(
+    mip = (
+        base_optimizer.initialize(
             BaseData(
                 items=["apple"], profits={"apple": 1.0}, weights={"apple": 1.0}, max_weight=1.0
             )
         )
         .validate()
         .build_mip()
-        .solve()
     )
+
+    print(mip.get_lp_string())
+
+    solution = mip.solve()
 
     assert solution[SolutionObjValue].objective_value == approx(1.0)
     assert solution[SolutionData].packed_items == ["apple"]
@@ -26,7 +31,7 @@ def test_one_fitting_item() -> None:
 def test_two_items_one_fits() -> None:
     """There is only one item, which fits into the knapsack."""
     solution = (
-        knapsack_optimizer.initialize(
+        base_optimizer.initialize(
             BaseData(
                 items=["apple", "banana"],
                 profits={"apple": 1.0, "banana": 2.0},

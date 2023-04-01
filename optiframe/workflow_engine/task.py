@@ -8,8 +8,8 @@ class Task(abc.ABC, Generic[T]):
     """
     A task in the workflow which executes a specific action.
 
-    The task can generate base_data and return it from the `execute` function.
-    This base_data will be made available to the other tasks of the workflow.
+    The task can generate data and return it from the `execute` function.
+    This data will be made available to the other tasks of the workflow.
 
     The task can also depend on data by other tasks by specifying dependencies in the constructor.
     The type annotation of the constructor parameters determine which dependency will be injected.

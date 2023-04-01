@@ -30,20 +30,20 @@ class BaseData:
 class ValidateBaseData(Task[None]):
     """A task to validate that the knapsack base_data is valid."""
 
-    data: BaseData
+    base_data: BaseData
 
-    def __init__(self, data: BaseData):
-        self.data = data
+    def __init__(self, base_data: BaseData):
+        self.base_data = base_data
 
     def execute(self) -> None:
-        for item in self.data.items:
-            assert item in self.data.profits.keys(), f"No profit defined for item {item}"
-            assert self.data.profits[item] >= 0, f"The profit for item {item} must be positive"
+        for item in self.base_data.items:
+            assert item in self.base_data.profits.keys(), f"No profit defined for item {item}"
+            assert self.base_data.profits[item] >= 0, f"The profit for item {item} must be positive"
 
-            assert item in self.data.weights.keys(), f"No weight defined for item {item}"
-            assert self.data.weights[item] >= 0, f"The weight for item {item} must be positive"
+            assert item in self.base_data.weights.keys(), f"No weight defined for item {item}"
+            assert self.base_data.weights[item] >= 0, f"The weight for item {item} must be positive"
 
-            assert self.data.max_weight >= 0, "The maximum weight must be positive"
+            assert self.base_data.max_weight >= 0, "The maximum weight must be positive"
 
 
 @dataclass
@@ -53,31 +53,33 @@ class BaseMipData:
 
 
 class BuildBaseMip(Task[BaseMipData]):
-    data: BaseData
+    base_data: BaseData
     problem: LpProblem
     objective: LpAffineExpression
 
-    def __init__(self, data: BaseData, problem: LpProblem, objective: LpAffineExpression):
-        self.data = data
+    def __init__(self, base_data: BaseData, problem: LpProblem, objective: LpAffineExpression):
+        self.base_data = base_data
         self.problem = problem
         self.objective = objective
 
     def execute(self) -> BaseMipData:
         # Pack the item into the knapsack?
         var_pack_item = {
-            item: LpVariable(f"pack_item({item})", cat=LpBinary) for item in self.data.items
+            item: LpVariable(f"pack_item({item})", cat=LpBinary) for item in self.base_data.items
         }
 
         # Respect the knapsack capacity
         self.problem += (
-            lpSum(self.data.weights[item] * var_pack_item[item] for item in self.data.items)
-            <= self.data.max_weight,
+            lpSum(
+                self.base_data.weights[item] * var_pack_item[item] for item in self.base_data.items
+            )
+            <= self.base_data.max_weight,
             "respect_capacity",
         )
 
         # Maximize the profit
         self.objective += lpSum(
-            self.data.profits[item] * var_pack_item[item] for item in self.data.items
+            self.base_data.profits[item] * var_pack_item[item] for item in self.base_data.items
         )
 
         return BaseMipData(var_pack_item)
@@ -89,21 +91,21 @@ class SolutionData:
 
 
 class ExtractSolution(Task[SolutionData]):
-    data: BaseData
-    mip_data: BaseMipData
+    base_data: BaseData
+    base_mip_data: BaseMipData
     problem: LpProblem
 
-    def __init__(self, data: BaseData, mip_data: BaseMipData, problem: LpProblem):
-        self.data = data
+    def __init__(self, base_data: BaseData, base_mip_data: BaseMipData, problem: LpProblem):
+        self.base_data = base_data
         self.problem = problem
-        self.mip_data = mip_data
+        self.base_mip_data = base_mip_data
 
     def execute(self) -> SolutionData:
         packed_items = []
 
         # Determine which items should be included in the knapsack
-        for item in self.data.items:
-            var = self.mip_data.var_pack_item[item]
+        for item in self.base_data.items:
+            var = self.base_mip_data.var_pack_item[item]
 
             if round(var.value()) == 1:
                 packed_items.append(item)

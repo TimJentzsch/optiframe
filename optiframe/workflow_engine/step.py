@@ -26,7 +26,7 @@ class TaskDependency:
 
 
 # Data which can be injected into a task.
-# The keys should be class objects which define the type of the base_data.
+# The keys should be class objects which define the type of the data.
 StepData = dict[Any, Any]
 
 
@@ -83,7 +83,7 @@ class InitializedStep:
         This is necessary to inject the dependencies automatically.
         :raises ScheduleError: If the tasks can't be scheduled,
         e.g. due to circular dependencies.
-        :return: The step base_data, including the one generated during this step.
+        :return: The step data, including the one generated during this step.
         """
         start_time = datetime.now()
         logger.info(f"Executing step {self.name()}...")
@@ -104,26 +104,26 @@ class InitializedStep:
 
             for task in tasks_to_execute:
                 if len(missing_dependencies[task]) == 0:
-                    # Create the base_data parameters to instantiate the task
+                    # Create the data parameters to instantiate the task
                     dep_data = {
                         dep.param: self.step_data[dep.annotation] for dep in dependencies[task]
                     }
-                    # Determine what type of base_data is created by the task
+                    # Determine what type of data is created by the task
                     data_annotation = inspect.signature(task.execute).return_annotation
 
-                    # Instantiate the task, using the base_data it requires
+                    # Instantiate the task, using the data it requires
                     task_obj = task(**dep_data)
 
-                    # Execute the action of the task and save the returned base_data
+                    # Execute the action of the task and save the returned data
                     data = task_obj.execute()
 
                     if data is None and data_annotation is not None:
                         raise InjectionError(
-                            f"Task {task} returned base_data, but has not type annotation for it. "
-                            "This prevents the base_data from being accessible to other tasks."
+                            f"Task {task} returned data, but has not type annotation for it. "
+                            "This prevents the data from being accessible to other tasks."
                         )
                     elif data is not None:
-                        # Make the base_data available to other tasks
+                        # Make the data available to other tasks
                         self.step_data[data_annotation] = data
 
                     has_executed = True
@@ -150,7 +150,7 @@ class InitializedStep:
 
     def _task_dependencies(self) -> dict[Type[Task[Any]], list[TaskDependency]]:
         """
-        Determine which task depends on which type of base_data.
+        Determine which task depends on which type of data.
 
         :return: For each task, a list of its dependencies.
         """

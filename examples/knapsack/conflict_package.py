@@ -15,7 +15,7 @@ class ConflictData:
 
 
 class ValidateConflictData(Task[None]):
-    """A task to validate that the knapsack base_data is valid."""
+    """A task to validate that the knapsack data is valid."""
 
     base_data: BaseData
     conflict_data: ConflictData

@@ -13,15 +13,6 @@ from optiframe import Optimizer, SolutionObjValue, InfeasibleError
 from .conflict_package import conflict_package
 
 
-# An optimizer object to solve the knapsack problem
-knapsack_optimizer = (
-    Optimizer("knapsack", sense=LpMaximize).add_package(base_package).add_package(conflict_package)
-)
-
-
-__all__ = ["knapsack_optimizer"]
-
-
 def demo() -> None:
     """Solve a small instance of the knapsack problem."""
     item_count = 20
@@ -32,6 +23,13 @@ def demo() -> None:
         weights={f"item_{i}": i * 20 % 43 for i in range(item_count)},
         profits={f"item_{i}": i + 1 for i in range(item_count)},
         max_weight=49,
+    )
+
+    # Create an optimizer object with both packages
+    knapsack_optimizer = (
+        Optimizer("knapsack", sense=LpMaximize)
+        .add_package(base_package)
+        .add_package(conflict_package)
     )
 
     # Try to solve the problem
