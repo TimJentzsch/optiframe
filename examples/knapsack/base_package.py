@@ -4,6 +4,7 @@ from pulp import LpVariable, LpProblem, LpBinary, lpSum
 
 from optiframe import Task
 from optiframe.framework import OptimizationPackage
+from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, ValidateTask
 
 
 @dataclass
@@ -27,7 +28,7 @@ class BaseData:
     max_weight: float
 
 
-class ValidateBaseData(Task[None]):
+class ValidateBaseData(ValidateTask):
     """A task to validate that the knapsack base_data is valid."""
 
     base_data: BaseData
@@ -52,7 +53,7 @@ class BaseMipData:
     var_pack_item: dict[str, LpVariable]
 
 
-class BuildBaseMip(Task[BaseMipData]):
+class BuildBaseMip(BuildMipTask[BaseMipData]):
     base_data: BaseData
     problem: LpProblem
 
@@ -88,7 +89,7 @@ class SolutionData:
     packed_items: list[str]
 
 
-class ExtractSolution(Task[SolutionData]):
+class ExtractSolution(ExtractSolutionTask[SolutionData]):
     base_data: BaseData
     base_mip_data: BaseMipData
     problem: LpProblem

@@ -6,6 +6,7 @@ from examples.knapsack.base_package import BaseMipData
 from optiframe import Task
 from optiframe.framework import OptimizationPackage
 from examples.knapsack.base_package import BaseData
+from optiframe.framework.tasks import BuildMipTask, ValidateTask
 
 
 @dataclass
@@ -14,7 +15,7 @@ class ConflictData:
     conflicts: list[tuple[str, str]]
 
 
-class ValidateConflictData(Task[None]):
+class ValidateConflictData(ValidateTask):
     """A task to validate that the knapsack data is valid."""
 
     base_data: BaseData
@@ -35,7 +36,7 @@ class ValidateConflictData(Task[None]):
             assert item_1 != item_2, f"Item {item_1} is conflicting with itself"
 
 
-class BuildConflictMip(Task[None]):
+class BuildConflictMip(BuildMipTask[None]):
     base_data: BaseData
     base_mip_data: BaseMipData
 
