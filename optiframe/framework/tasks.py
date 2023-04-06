@@ -1,73 +1,46 @@
-from dataclasses import dataclass
-from typing import Any, Optional
+import abc
+from typing import TypeVar, Generic
 
-from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus, LpMaximize
+from optiframe import Task
 
-from optiframe.framework.errors import InfeasibleError
-from optiframe.workflow_engine import Task
-
-
-@dataclass
-class ProblemSettings:
-    name: str
-    sense: LpMinimize | LpMaximize
+T = TypeVar("T")
 
 
-class CreateProblemTask(Task[LpProblem]):
-    problem_settings: ProblemSettings
+class ValidateTask(Task[None], abc.ABC):
+    """
+    A task to validate the data describing the problem instance.
 
-    def __init__(self, problem_settings: ProblemSettings):
-        self.problem_settings = problem_settings
+    The `execute` method should raise an `AssertionError` if the data is not valid.
+    """
 
-    def execute(self) -> LpProblem:
-        problem = LpProblem(self.problem_settings.name, self.problem_settings.sense)
-        # Initialize the objective to an empty expression
-        problem.setObjective(LpAffineExpression())
-        return problem
+    pass
 
 
-@dataclass
-class SolveSettings:
-    # The PuLP solver object to use for the optimization
-    solver: Optional[Any]
+class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
+    """
+    A task to pre-process the data to make the model smaller or more efficient.
+
+    This can reduce the the total time needed to solve the problem.
+    """
+
+    pass
 
 
-class SolveTask(Task[None]):
-    problem: LpProblem
-    objective: LpAffineExpression
-    solve_settings: SolveSettings
+class BuildMipTask(Task[T], abc.ABC, Generic[T]):
+    """
+    A task to construct (or modify) the mixed integer program.
 
-    def __init__(
-        self,
-        problem: LpProblem,
-        solve_settings: SolveSettings,
-    ):
-        self.problem = problem
-        self.solve_settings = solve_settings
+    This is the central of the optimization package as it modifies the final result.
+    """
 
-    def execute(self) -> None:
-        # Solve the problem
-        status_code = self.problem.solve(solver=self.solve_settings.solver)
-        status = LpStatus[status_code]
-
-        if status != "Optimal":
-            raise InfeasibleError()
+    pass
 
 
-@dataclass
-class SolutionObjValue:
-    """The objective value of the solution."""
+class ExtractSolutionTask(Task[T], abc.ABC):
+    """
+    A task to extract the relevant information from the solution of the MIP.
 
-    objective_value: float
+    In this task, variable values can be selected, discarded or aggregated.
+    """
 
-
-class ExtractSolutionObjValueTask(Task[SolutionObjValue]):
-    problem: LpProblem
-
-    def __init__(self, problem: LpProblem):
-        self.problem = problem
-
-    def execute(self) -> SolutionObjValue:
-        cost = self.problem.objective.value()
-
-        return SolutionObjValue(cost)
+    pass

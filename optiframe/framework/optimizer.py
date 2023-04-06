@@ -7,24 +7,24 @@ from typing import Optional, Self, Type, Any
 from pulp import LpProblem, LpMinimize, LpMaximize
 
 from optiframe.workflow_engine import Step, StepData
-from optiframe.workflow_engine.task import Task
 from optiframe.workflow_engine.workflow import Workflow, InitializedWorkflow
 
-from .tasks import (
+from .default_tasks import (
     CreateProblemTask,
     SolveTask,
     SolveSettings,
     ExtractSolutionObjValueTask,
     ProblemSettings,
 )
+from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutionTask
 
 
 @dataclass
 class OptimizationPackage:
-    build_mip: Type[Task[Any]]
-    validate: Optional[Type[Task[None]]] = None
-    pre_processing: Optional[Type[Task[Any]]] = None
-    extract_solution: Optional[Type[Task[Any]]] = None
+    build_mip: Type[BuildMipTask[Any]]
+    validate: Optional[Type[ValidateTask]] = None
+    pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
+    extract_solution: Optional[Type[ExtractSolutionTask[Any]]] = None
 
 
 class Optimizer:
