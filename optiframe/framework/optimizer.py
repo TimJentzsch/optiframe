@@ -32,7 +32,7 @@ class Optimizer:
     sense: LpMinimize | LpMaximize
     packages: list[OptimizationPackage]
 
-    def __init__(self, name: str, sense: LpMinimize | LpMaximize = LpMinimize):
+    def __init__(self, name: str, sense: LpMinimize | LpMaximize):
         """
         Create a new optimizer.
 
