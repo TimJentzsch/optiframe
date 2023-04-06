@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 from pulp import LpVariable, LpProblem, LpBinary, lpSum
 
-from optiframe import Task
 from optiframe.framework import OptimizationPackage
 from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, ValidateTask
 

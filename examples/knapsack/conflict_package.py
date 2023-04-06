@@ -3,7 +3,6 @@ from dataclasses import dataclass
 from pulp import LpProblem
 
 from examples.knapsack.base_package import BaseMipData
-from optiframe import Task
 from optiframe.framework import OptimizationPackage
 from examples.knapsack.base_package import BaseData
 from optiframe.framework.tasks import BuildMipTask, ValidateTask
