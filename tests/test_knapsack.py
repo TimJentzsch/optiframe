@@ -24,6 +24,7 @@ def test_one_fitting_item() -> None:
             )
         )
         .validate()
+        .pre_processing()
         .build_mip()
         .print_mip_and_solve()
     )
@@ -44,6 +45,7 @@ def test_two_items_one_fits() -> None:
             )
         )
         .validate()
+        .pre_processing()
         .build_mip()
         .print_mip_and_solve()
     )
@@ -73,6 +75,7 @@ def test_conflict() -> None:
             ),
         )
         .validate()
+        .pre_processing()
         .build_mip()
         .print_mip_and_solve()
     )

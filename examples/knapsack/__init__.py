@@ -42,6 +42,7 @@ def demo() -> None:
         solution = (
             knapsack_optimizer.initialize(base_data, conflict_data)
             .validate()
+            .pre_processing()
             .build_mip()
             .print_mip_and_solve()
         )

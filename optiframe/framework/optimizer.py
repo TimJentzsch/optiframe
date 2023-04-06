@@ -23,6 +23,7 @@ from .tasks import (
 class OptimizationPackage:
     build_mip: Type[Task[Any]]
     validate: Optional[Type[Task[None]]] = None
+    pre_processing: Optional[Type[Task[Any]]] = None
     extract_solution: Optional[Type[Task[Any]]] = None
 
 
@@ -49,6 +50,7 @@ class Optimizer:
 
     def initialize(self, *data: Any) -> InitializedOptimizer:
         validate_step = Step("validate")
+        pre_processing_step = Step("pre_processing")
         build_mip_step = Step("build_mip").add_task(CreateProblemTask)
         solve_step = Step("solve").add_task(SolveTask)
         extract_solution_step = Step("extract_solution").add_task(ExtractSolutionObjValueTask)
@@ -56,6 +58,9 @@ class Optimizer:
         for package in self.packages:
             if package.validate is not None:
                 validate_step.add_task(package.validate)
+
+            if package.pre_processing is not None:
+                pre_processing_step.add_task(package.pre_processing)
 
             build_mip_step.add_task(package.build_mip)
 
@@ -65,6 +70,7 @@ class Optimizer:
         workflow = (
             Workflow()
             .add_step(validate_step)
+            .add_step(pre_processing_step)
             .add_step(build_mip_step)
             .add_step(solve_step)
             .add_step(extract_solution_step)
@@ -91,8 +97,19 @@ class ValidatedOptimizer:
     def __init__(self, workflow: InitializedWorkflow):
         self.workflow = workflow
 
-    def build_mip(self) -> BuiltOptimizer:
+    def pre_processing(self) -> PreProcessedOptimizer:
         self.workflow.execute_step(1)
+        return PreProcessedOptimizer(self.workflow)
+
+
+class PreProcessedOptimizer:
+    workflow: InitializedWorkflow
+
+    def __init__(self, workflow: InitializedWorkflow):
+        self.workflow = workflow
+
+    def build_mip(self) -> BuiltOptimizer:
+        self.workflow.execute_step(2)
         return BuiltOptimizer(self.workflow)
 
 
@@ -115,8 +132,8 @@ class BuiltOptimizer:
         solver: Optional[Any] = None,
     ) -> StepData:
         self.workflow.add_data(SolveSettings(solver))
-        self.workflow.execute_step(2)
-        return self.workflow.execute_step(3)
+        self.workflow.execute_step(3)
+        return self.workflow.execute_step(4)
 
     def print_mip_and_solve(self, solver: Optional[Any] = None) -> StepData:
         """Print the description of the MIP and solve it."""
