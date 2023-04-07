@@ -9,9 +9,10 @@ high modularity and testability.
 
 - The optimization process is divided into multiple **steps** which are clearly separated:
   1. **Validation** allows you to validate the input data.
-  2. **MIP building** allows you to modify the MIP to define the optimization problem.
-  3. **Solving** is a pre-defined step that obtains an optimal solution for the problem.
-  4. **Solution extraction** allows you to process the variable values of the solution into something more meaningful.
+  2. **Pre-processing** allows you to optimize the provided data to reduce the size of the final model.
+  3. **MIP building** allows you to modify the MIP to define the optimization problem.
+  4. **Solving** is a pre-defined step that obtains an optimal solution for the problem.
+  5. **Solution extraction** allows you to process the variable values of the solution into something more meaningful.
 - **Tasks** are the core components that allow you to implement functionality for each step.
   - The constructor of a task allows you to define *dependencies* for that task,
     which are automatically injected by the optimizer based on their type annotation.
@@ -19,7 +20,7 @@ high modularity and testability.
     It may return data which can then be used by other tasks as a dependency.
 - **Packages** combine tasks that belong together.
     Each package must contain a task for building the MIP and can additionally contain tasks
-    for validation and solution extraction.
+    for validation, pre-processing and solution extraction.
     The packages are what makes Optiframe so modular:
     You can define extensions of a problem in a separate package and only include it if needed.
 - The **optimizer** allows you to configure the packages that you need.
