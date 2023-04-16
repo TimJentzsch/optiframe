@@ -17,7 +17,7 @@ from .default_tasks import (
     ExtractSolutionObjValueTask,
     ProblemSettings,
 )
-from .metrics import StepTimes
+from .metrics import StepTimes, ModelSize
 from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutionTask
 
 
@@ -184,7 +184,7 @@ class BuiltOptimizer:
         extract_solution_time = end_extract_solution - end_solve
 
         # Add metrics to result
-        step_times = StepTimes(
+        result[StepTimes] = StepTimes(
             validate=self.validate_time,
             pre_processing=self.pre_processing_time,
             build_mip=self.build_mip_time,
@@ -192,7 +192,10 @@ class BuiltOptimizer:
             extract_solution=extract_solution_time,
         )
 
-        result[StepTimes] = step_times
+        result[ModelSize] = ModelSize(
+            variable_count=self.problem().numVariables(),
+            constraint_count=self.problem().numConstraints(),
+        )
 
         return result
 
