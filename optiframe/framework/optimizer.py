@@ -189,6 +189,8 @@ class PreProcessedOptimizer:
 
 
 class BuiltOptimizer:
+    """An optimizer where the MIP has been built."""
+
     workflow: InitializedWorkflow
 
     validate_time: timedelta
@@ -208,9 +210,14 @@ class BuiltOptimizer:
         self.build_mip_time = build_mip_time
 
     def problem(self) -> LpProblem:
+        """Return the `LpProblem` instance defining the MIP."""
         return self.workflow.step_data[LpProblem]
 
     def get_lp_string(self, line_limit: int = 100) -> str:
+        """Get a string representing the LP defined by the MIP.
+
+        :param line_limit: The maximum number of lines to include of the LP.
+        """
         with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8", suffix=".lp") as file:
             self.problem().writeLP(filename=file.name)
             return "".join(file.readlines()[:line_limit])
@@ -219,6 +226,11 @@ class BuiltOptimizer:
         self,
         solver: Optional[Any] = None,
     ) -> StepData:
+        """Solve the optimization problem with the given solver.
+
+        :param solver: A PuLP solver class to use to solve the optimization problem.
+        Defaults to the coinOR solver, bundled with PuLP.
+        """
         self.workflow.add_data(SolveSettings(solver))
 
         start = datetime.now()

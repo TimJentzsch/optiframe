@@ -1,3 +1,4 @@
+"""Errors that can occur in the workflow engine."""
 from __future__ import annotations
 
 

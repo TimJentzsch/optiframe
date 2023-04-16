@@ -21,13 +21,17 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class TaskDependency:
+    """A dependency required by a task, as defined in the `.__init__` method."""
+
     param: str
     annotation: Any
 
     def __repr__(self) -> str:
+        """Get the string representation of a task dependency."""
         return f"{self.param}: {self.annotation.__name__}"
 
     def __str__(self) -> str:
+        """Get a human-readable string of a task dependency."""
         return f"{self.param}: {self.annotation.__name__}"
 
 
@@ -60,10 +64,16 @@ class Step:
         return self
 
     def initialize(self, step_data: StepData) -> InitializedStep:
+        """Initialize a step with data from previous steps.
+
+        This allows data to be passed between steps and be added from the user.
+        """
         return InitializedStep(self, step_data)
 
 
 class InitializedStep:
+    """A step that has been initialized with data."""
+
     step: Step
     step_data: StepData
 
@@ -72,9 +82,11 @@ class InitializedStep:
         self.step_data = step_data
 
     def name(self) -> str:
+        """Get the name of the step."""
         return self.step.name
 
     def tasks(self) -> list[Type[Task[Any]]]:
+        """Get the tasks that have to be executed during this step."""
         return self.step.tasks
 
     def execute(self) -> StepData:
