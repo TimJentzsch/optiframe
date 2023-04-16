@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import tempfile
 from dataclasses import dataclass
+from datetime import datetime, timedelta
 from typing import Optional, Self, Type, Any
 
 from pulp import LpProblem, LpMinimize, LpMaximize
@@ -16,6 +17,7 @@ from .default_tasks import (
     ExtractSolutionObjValueTask,
     ProblemSettings,
 )
+from .metrics import StepTimes
 from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutionTask
 
 
@@ -87,37 +89,74 @@ class InitializedOptimizer:
         self.workflow = workflow
 
     def validate(self) -> ValidatedOptimizer:
+        start = datetime.now()
         self.workflow.execute_step(0)
-        return ValidatedOptimizer(self.workflow)
+        validate_time = datetime.now() - start
+
+        return ValidatedOptimizer(self.workflow, validate_time)
 
 
 class ValidatedOptimizer:
     workflow: InitializedWorkflow
 
-    def __init__(self, workflow: InitializedWorkflow):
+    validate_time: timedelta
+
+    def __init__(self, workflow: InitializedWorkflow, validate_time: timedelta):
         self.workflow = workflow
+        self.validate_time = validate_time
 
     def pre_processing(self) -> PreProcessedOptimizer:
+        start = datetime.now()
         self.workflow.execute_step(1)
-        return PreProcessedOptimizer(self.workflow)
+        pre_processing_time = datetime.now() - start
+
+        return PreProcessedOptimizer(self.workflow, self.validate_time, pre_processing_time)
 
 
 class PreProcessedOptimizer:
     workflow: InitializedWorkflow
 
-    def __init__(self, workflow: InitializedWorkflow):
+    validate_time: timedelta
+    pre_processing_time: timedelta
+
+    def __init__(
+        self,
+        workflow: InitializedWorkflow,
+        validate_time: timedelta,
+        pre_processing_time: timedelta,
+    ):
         self.workflow = workflow
+        self.validate_time = validate_time
+        self.pre_processing_time = pre_processing_time
 
     def build_mip(self) -> BuiltOptimizer:
+        start = datetime.now()
         self.workflow.execute_step(2)
-        return BuiltOptimizer(self.workflow)
+        build_mip_time = datetime.now() - start
+
+        return BuiltOptimizer(
+            self.workflow, self.validate_time, self.pre_processing_time, build_mip_time
+        )
 
 
 class BuiltOptimizer:
     workflow: InitializedWorkflow
 
-    def __init__(self, workflow: InitializedWorkflow):
+    validate_time: timedelta
+    pre_processing_time: timedelta
+    build_mip_time: timedelta
+
+    def __init__(
+        self,
+        workflow: InitializedWorkflow,
+        validate_time: timedelta,
+        pre_processing_time: timedelta,
+        build_mip_time: timedelta,
+    ):
         self.workflow = workflow
+        self.validate_time = validate_time
+        self.pre_processing_time = pre_processing_time
+        self.build_mip_time = build_mip_time
 
     def problem(self) -> LpProblem:
         return self.workflow.step_data[LpProblem]
@@ -132,8 +171,30 @@ class BuiltOptimizer:
         solver: Optional[Any] = None,
     ) -> StepData:
         self.workflow.add_data(SolveSettings(solver))
+
+        start = datetime.now()
+        # Solve the MIP
         self.workflow.execute_step(3)
-        return self.workflow.execute_step(4)
+        end_solve = datetime.now()
+        # Extract the solution
+        result = self.workflow.execute_step(4)
+        end_extract_solution = datetime.now()
+
+        solve_time = end_solve - start
+        extract_solution_time = end_extract_solution - end_solve
+
+        # Add metrics to result
+        step_times = StepTimes(
+            validate=self.validate_time,
+            pre_processing=self.pre_processing_time,
+            build_mip=self.build_mip_time,
+            solve=solve_time,
+            extract_solution=extract_solution_time,
+        )
+
+        result[StepTimes] = step_times
+
+        return result
 
     def print_mip_and_solve(self, solver: Optional[Any] = None) -> StepData:
         """Print the description of the MIP and solve it."""
