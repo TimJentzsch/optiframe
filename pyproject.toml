@@ -27,7 +27,17 @@ line-length = 100
 [tool.ruff]
 line-length = 100
 select = ["E", "F", "D"]
-ignore = ["D213", "D203"]
+ignore = [
+    # multi-line-summary-second-line
+    # Collides with other lint rule and is non-standard
+    "D213",
+    # one-blank-line-before-class
+    # Collides with other lint rule and is non-standard
+    "D203",
+    # undocumented-public-init
+    # Often just repeats the class name and doesn't really add new information
+    "D107"
+]
 
 [tool.mypy]
 python_version = "3.11"

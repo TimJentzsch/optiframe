@@ -1,3 +1,9 @@
+"""The steps of a workflow.
+
+Steps are executed sequentially in the optimization process.
+Each step can contain multiple tasks, which are ordered based on their dependencies.
+"""
+
 from __future__ import annotations
 
 import inspect

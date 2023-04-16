@@ -1,3 +1,5 @@
+"""A package that allows you to add conflicting items which must not be packed together."""
+
 from dataclasses import dataclass
 
 from pulp import LpProblem
@@ -10,12 +12,14 @@ from optiframe.framework.tasks import BuildMipTask, ValidateTask
 
 @dataclass
 class ConflictData:
+    """The data required for the conflict package."""
+
     # A list of item pairs which must not be packed together
     conflicts: list[tuple[str, str]]
 
 
 class ValidateConflictData(ValidateTask):
-    """A task to validate that the knapsack data is valid."""
+    """A task to validate that the data of the conflict package is valid."""
 
     base_data: BaseData
     conflict_data: ConflictData
@@ -25,6 +29,7 @@ class ValidateConflictData(ValidateTask):
         self.conflict_data = conflict_data
 
     def execute(self) -> None:
+        """Validate the data of the conflict package."""
         for item_1, item_2 in self.conflict_data.conflicts:
             assert (
                 item_1 in self.base_data.items
@@ -36,6 +41,8 @@ class ValidateConflictData(ValidateTask):
 
 
 class BuildConflictMip(BuildMipTask[None]):
+    """A task to add the variables and constraints of the conflict package to the MIP."""
+
     base_data: BaseData
     base_mip_data: BaseMipData
 
@@ -56,6 +63,7 @@ class BuildConflictMip(BuildMipTask[None]):
         self.problem = problem
 
     def execute(self) -> None:
+        """Add the variables and constraints of the conflict package to the MIP."""
         var_pack_item = self.base_mip_data.var_pack_item
 
         # Prevent the conflicting items from being packed together

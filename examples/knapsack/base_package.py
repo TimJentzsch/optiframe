@@ -1,3 +1,8 @@
+"""The base package for the knapsack problem.
+
+Provides the data and functionality that is needed for all problem variations.
+"""
+
 from dataclasses import dataclass
 
 from pulp import LpVariable, LpProblem, LpBinary, lpSum
@@ -34,6 +39,7 @@ class ValidateBaseData(ValidateTask):
         self.base_data = base_data
 
     def execute(self) -> None:
+        """Validate the base data of the knapsack problem."""
         for item in self.base_data.items:
             assert item in self.base_data.profits.keys(), f"No profit defined for item {item}"
             assert self.base_data.profits[item] >= 0, f"The profit for item {item} must be positive"
@@ -46,11 +52,15 @@ class ValidateBaseData(ValidateTask):
 
 @dataclass
 class BaseMipData:
+    """The variables added by the base package of the knapsack problem."""
+
     # Pack the item into the knapsack?
     var_pack_item: dict[str, LpVariable]
 
 
 class BuildBaseMip(BuildMipTask[BaseMipData]):
+    """A task to add the variables and constraints of the base package to the MIP."""
+
     base_data: BaseData
     problem: LpProblem
 
@@ -59,6 +69,7 @@ class BuildBaseMip(BuildMipTask[BaseMipData]):
         self.problem = problem
 
     def execute(self) -> BaseMipData:
+        """Add the variables and constraints of the base package to the MIP."""
         # Pack the item into the knapsack?
         var_pack_item = {
             item: LpVariable(f"pack_item({item})", cat=LpBinary) for item in self.base_data.items
@@ -83,10 +94,14 @@ class BuildBaseMip(BuildMipTask[BaseMipData]):
 
 @dataclass
 class SolutionData:
+    """The solution to the knapsack problem."""
+
     packed_items: list[str]
 
 
 class ExtractSolution(ExtractSolutionTask[SolutionData]):
+    """A task to extract the solution of the knapsack problem from the variable values."""
+
     base_data: BaseData
     base_mip_data: BaseMipData
     problem: LpProblem
@@ -97,6 +112,7 @@ class ExtractSolution(ExtractSolutionTask[SolutionData]):
         self.base_mip_data = base_mip_data
 
     def execute(self) -> SolutionData:
+        """Extract the solution of the knapsack problem from the variable values."""
         packed_items = []
 
         # Determine which items should be included in the knapsack
