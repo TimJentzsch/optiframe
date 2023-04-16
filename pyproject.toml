@@ -26,6 +26,8 @@ line-length = 100
 
 [tool.ruff]
 line-length = 100
+select = ["E", "F", "D"]
+ignore = ["D213", "D203"]
 
 [tool.mypy]
 python_version = "3.11"

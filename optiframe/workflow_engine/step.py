@@ -31,8 +31,7 @@ StepData = dict[Any, Any]
 
 
 class Step:
-    """
-    One step in the workflow process.
+    """One step in the workflow process.
 
     Each step is composed of multiple tasks which will be executed within this step.
     Multiple steps are executed sequentially.
@@ -46,8 +45,7 @@ class Step:
         self.tasks = []
 
     def add_task(self, task: Type[Task[Any]]) -> Self:
-        """
-        Register a task to run in this step.
+        """Register a task to run in this step.
 
         :param task: The task to register.
         :return: The same step, to use for function chaining.
@@ -74,8 +72,7 @@ class InitializedStep:
         return self.step.tasks
 
     def execute(self) -> StepData:
-        """
-        Execute the step by executing the action of all tasks within it.
+        """Execute the step by executing the action of all tasks within it.
 
         The dependencies of each task are injected automatically.
 
@@ -149,8 +146,7 @@ class InitializedStep:
         return self.step_data
 
     def _task_dependencies(self) -> dict[Type[Task[Any]], list[TaskDependency]]:
-        """
-        Determine which task depends on which type of data.
+        """Determine which task depends on which type of data.
 
         :return: For each task, a list of its dependencies.
         """

@@ -5,8 +5,7 @@ T = TypeVar("T")
 
 
 class Task(abc.ABC, Generic[T]):
-    """
-    A task in the workflow which executes a specific action.
+    """A task in the workflow which executes a specific action.
 
     The task can generate data and return it from the `execute` function.
     This data will be made available to the other tasks of the workflow.

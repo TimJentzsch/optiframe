@@ -8,9 +8,7 @@ from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, Validat
 
 @dataclass
 class BaseData:
-    """
-    The data needed to describe an instance of the knapsack problem.
-    """
+    """The data needed to describe an instance of the knapsack problem."""
 
     # The available items
     items: list[str]

@@ -1,5 +1,4 @@
-"""
-An example showcasing the implementation of the knapsack problem with optiframe.
+"""An example showcasing the implementation of the knapsack problem with optiframe.
 
 For the knapsack problem, the task is to fill a knapsack with a given set of items.
 Each item may be included in the knapsack or not.
@@ -14,8 +13,7 @@ from .conflict_package import conflict_package, ConflictData
 
 
 def demo() -> None:
-    """
-    Solve a small instance of the knapsack problem.
+    """Solve a small instance of the knapsack problem.
 
     Can be executed via `poetry run knapsack`.
     """

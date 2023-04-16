@@ -35,8 +35,7 @@ class Optimizer:
     packages: list[OptimizationPackage]
 
     def __init__(self, name: str, sense: LpMinimize | LpMaximize):
-        """
-        Create a new optimizer.
+        """Create a new optimizer.
 
         :param name: The name of the optimization problem.
         :param sense: Whether to minimize or maximize the objective.
@@ -99,8 +98,7 @@ class InitializedOptimizer:
         self,
         solver: Optional[Any] = None,
     ) -> StepData:
-        """
-        Execute all optimization steps to solve the problem.
+        """Execute all optimization steps to solve the problem.
 
         This is a shorthand for
         `.validate().pre_processing().build_mip().solve(solver)`.
@@ -111,8 +109,7 @@ class InitializedOptimizer:
         self,
         solver: Optional[Any] = None,
     ) -> StepData:
-        """
-        Execute all optimization steps to solve the problem and print the created MIP.
+        """Execute all optimization steps to solve the problem and print the created MIP.
 
         This is a shorthand for
         `.validate().pre_processing().build_mip().print_mip_and_solve(solver)`.

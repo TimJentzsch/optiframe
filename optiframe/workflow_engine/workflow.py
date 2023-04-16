@@ -6,8 +6,7 @@ from .step import Step, StepData
 
 
 class Workflow:
-    """
-    A complete workflow.
+    """A complete workflow.
 
     The workflow is composed of steps, which are executed sequentially.
     Each step is composed of tasks, which can depend on each other.
