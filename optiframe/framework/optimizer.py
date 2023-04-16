@@ -95,6 +95,17 @@ class InitializedOptimizer:
 
         return ValidatedOptimizer(self.workflow, validate_time)
 
+    def solve(
+        self,
+        solver: Optional[Any] = None,
+    ) -> StepData:
+        """
+        Execute all optimization steps to solve the problem.
+
+        This is a shorthand for `.validate().pre_processing().build_mip().solve(solver)`.
+        """
+        return self.validate().pre_processing().build_mip().solve(solver)
+
 
 class ValidatedOptimizer:
     workflow: InitializedWorkflow
