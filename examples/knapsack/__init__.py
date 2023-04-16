@@ -14,7 +14,11 @@ from .conflict_package import conflict_package, ConflictData
 
 
 def demo() -> None:
-    """Solve a small instance of the knapsack problem."""
+    """
+    Solve a small instance of the knapsack problem.
+
+    Can be executed via `poetry run knapsack`.
+    """
     item_count = 20
 
     # Generate a problem instance with 20 items
@@ -39,13 +43,7 @@ def demo() -> None:
 
     # Try to solve the problem
     try:
-        solution = (
-            knapsack_optimizer.initialize(base_data, conflict_data)
-            .validate()
-            .pre_processing()
-            .build_mip()
-            .print_mip_and_solve()
-        )
+        solution = knapsack_optimizer.initialize(base_data, conflict_data).solve()
     except InfeasibleError:
         print("Failed to find a solution!")
         exit(1)
