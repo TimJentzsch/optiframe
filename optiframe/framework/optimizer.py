@@ -1,3 +1,4 @@
+"""The optimizer classes used to configure and execute the optimization process."""
 from __future__ import annotations
 
 import tempfile
@@ -23,6 +24,8 @@ from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutio
 
 @dataclass
 class OptimizationPackage:
+    """A package bundling tasks for each step of the optimization process."""
+
     build_mip: Type[BuildMipTask[Any]]
     validate: Optional[Type[ValidateTask]] = None
     pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
@@ -30,13 +33,18 @@ class OptimizationPackage:
 
 
 class Optimizer:
+    """An optimizer for an optimization problem.
+
+    Can be configured by adding optimization packages,
+    which implement the actual optimization process.
+    """
+
     name: str
     sense: LpMinimize | LpMaximize
     packages: list[OptimizationPackage]
 
     def __init__(self, name: str, sense: LpMinimize | LpMaximize):
-        """
-        Create a new optimizer.
+        """Create a new optimizer.
 
         :param name: The name of the optimization problem.
         :param sense: Whether to minimize or maximize the objective.
@@ -47,10 +55,16 @@ class Optimizer:
         self.packages = []
 
     def add_package(self, package: OptimizationPackage) -> Self:
+        """Add an optimization package to the optimizer."""
         self.packages.append(package)
         return self
 
     def initialize(self, *data: Any) -> InitializedOptimizer:
+        """Initialize the optimizer with the data defining the problem instance.
+
+        Which data classes need to be added here depends on the packages
+        that have been added to the optimizer.
+        """
         validate_step = Step("validate")
         pre_processing_step = Step("pre_processing")
         build_mip_step = Step("build_mip").add_task(CreateProblemTask)
@@ -83,12 +97,15 @@ class Optimizer:
 
 
 class InitializedOptimizer:
+    """An optimizer that has been initialized with a concrete problem instance."""
+
     workflow: InitializedWorkflow
 
     def __init__(self, workflow: InitializedWorkflow):
         self.workflow = workflow
 
     def validate(self) -> ValidatedOptimizer:
+        """Validate the data provided during the initialization."""
         start = datetime.now()
         self.workflow.execute_step(0)
         validate_time = datetime.now() - start
@@ -99,8 +116,7 @@ class InitializedOptimizer:
         self,
         solver: Optional[Any] = None,
     ) -> StepData:
-        """
-        Execute all optimization steps to solve the problem.
+        """Execute all optimization steps to solve the problem.
 
         This is a shorthand for
         `.validate().pre_processing().build_mip().solve(solver)`.
@@ -111,8 +127,7 @@ class InitializedOptimizer:
         self,
         solver: Optional[Any] = None,
     ) -> StepData:
-        """
-        Execute all optimization steps to solve the problem and print the created MIP.
+        """Execute all optimization steps to solve the problem and print the created MIP.
 
         This is a shorthand for
         `.validate().pre_processing().build_mip().print_mip_and_solve(solver)`.
@@ -121,6 +136,8 @@ class InitializedOptimizer:
 
 
 class ValidatedOptimizer:
+    """An optimizer that has been initialized and validated."""
+
     workflow: InitializedWorkflow
 
     validate_time: timedelta
@@ -130,6 +147,11 @@ class ValidatedOptimizer:
         self.validate_time = validate_time
 
     def pre_processing(self) -> PreProcessedOptimizer:
+        """Execute the pre-processing tasks.
+
+        The pre-processing can reduce the size of the MIP which can in turn
+        reduce the time needed to obtain the optimal solution.
+        """
         start = datetime.now()
         self.workflow.execute_step(1)
         pre_processing_time = datetime.now() - start
@@ -138,6 +160,8 @@ class ValidatedOptimizer:
 
 
 class PreProcessedOptimizer:
+    """An optimizer that has been initialized, validated and pre-processed."""
+
     workflow: InitializedWorkflow
 
     validate_time: timedelta
@@ -154,6 +178,7 @@ class PreProcessedOptimizer:
         self.pre_processing_time = pre_processing_time
 
     def build_mip(self) -> BuiltOptimizer:
+        """Construct the mixed integer program for the problem instance."""
         start = datetime.now()
         self.workflow.execute_step(2)
         build_mip_time = datetime.now() - start
@@ -164,6 +189,8 @@ class PreProcessedOptimizer:
 
 
 class BuiltOptimizer:
+    """An optimizer where the MIP has been built."""
+
     workflow: InitializedWorkflow
 
     validate_time: timedelta
@@ -183,9 +210,14 @@ class BuiltOptimizer:
         self.build_mip_time = build_mip_time
 
     def problem(self) -> LpProblem:
+        """Return the `LpProblem` instance defining the MIP."""
         return self.workflow.step_data[LpProblem]
 
     def get_lp_string(self, line_limit: int = 100) -> str:
+        """Get a string representing the LP defined by the MIP.
+
+        :param line_limit: The maximum number of lines to include of the LP.
+        """
         with tempfile.NamedTemporaryFile(mode="w+", encoding="utf-8", suffix=".lp") as file:
             self.problem().writeLP(filename=file.name)
             return "".join(file.readlines()[:line_limit])
@@ -194,6 +226,11 @@ class BuiltOptimizer:
         self,
         solver: Optional[Any] = None,
     ) -> StepData:
+        """Solve the optimization problem with the given solver.
+
+        :param solver: A PuLP solver class to use to solve the optimization problem.
+        Defaults to the coinOR solver, bundled with PuLP.
+        """
         self.workflow.add_data(SolveSettings(solver))
 
         start = datetime.now()

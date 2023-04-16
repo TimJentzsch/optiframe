@@ -1,3 +1,5 @@
+"""The optimization framework, utilizing the workflow engine."""
+
 from .optimizer import (
     Optimizer,
     ValidatedOptimizer,

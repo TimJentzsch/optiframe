@@ -1,3 +1,4 @@
+"""A task in the workflow which executes a specific action."""
 import abc
 from typing import TypeVar, Generic
 
@@ -5,8 +6,7 @@ T = TypeVar("T")
 
 
 class Task(abc.ABC, Generic[T]):
-    """
-    A task in the workflow which executes a specific action.
+    """A task in the workflow which executes a specific action.
 
     The task can generate data and return it from the `execute` function.
     This data will be made available to the other tasks of the workflow.
@@ -18,4 +18,11 @@ class Task(abc.ABC, Generic[T]):
 
     @abc.abstractmethod
     def execute(self) -> T:
+        """Execute the action of this task.
+
+        This method is called once all the dependencies of the task have been gathered.
+        It can access the data of the dependencies through the `self` parameter.
+
+        The data that is returned from this method can be used by other tasks.
+        """
         pass

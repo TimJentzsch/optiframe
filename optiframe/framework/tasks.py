@@ -1,3 +1,4 @@
+"""The abstract task types for each optimization step."""
 import abc
 from typing import TypeVar, Generic
 
@@ -7,8 +8,7 @@ T = TypeVar("T")
 
 
 class ValidateTask(Task[None], abc.ABC):
-    """
-    A task to validate the data describing the problem instance.
+    """A task to validate the data describing the problem instance.
 
     The `execute` method should raise an `AssertionError` if the data is not valid.
     """
@@ -17,8 +17,7 @@ class ValidateTask(Task[None], abc.ABC):
 
 
 class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
-    """
-    A task to pre-process the data to make the model smaller or more efficient.
+    """A task to pre-process the data to make the model smaller or more efficient.
 
     This can reduce the the total time needed to solve the problem.
     """
@@ -27,8 +26,7 @@ class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
 
 
 class BuildMipTask(Task[T], abc.ABC, Generic[T]):
-    """
-    A task to construct (or modify) the mixed integer program.
+    """A task to construct (or modify) the mixed integer program.
 
     This is the central of the optimization package as it modifies the final result.
     """
@@ -37,8 +35,7 @@ class BuildMipTask(Task[T], abc.ABC, Generic[T]):
 
 
 class ExtractSolutionTask(Task[T], abc.ABC):
-    """
-    A task to extract the relevant information from the solution of the MIP.
+    """A task to extract the relevant information from the solution of the MIP.
 
     In this task, variable values can be selected, discarded or aggregated.
     """

@@ -1,3 +1,5 @@
+"""Tests for the knapsack problem as modeled in `examples/knapsack`."""
+
 from datetime import timedelta
 
 from pulp import LpMaximize
@@ -57,7 +59,8 @@ def test_two_items_one_fits() -> None:
 
 
 def test_conflict() -> None:
-    """
+    """Test that the conflict package works as expected.
+
     There are three items.
     The first two fit in the knapsack together and would yield the most profit.
     The third item fills the whole knapsack and is worth less than one and two,
@@ -87,8 +90,7 @@ def test_conflict() -> None:
 
 
 def test_model_size_base() -> None:
-    """
-    Test that the model size of the base model is correct.
+    """Test that the model size of the base model is correct.
 
     We expect:
     - Variable count to be equal to the number of items
@@ -113,8 +115,7 @@ def test_model_size_base() -> None:
 
 
 def test_model_size_conflict() -> None:
-    """
-    Test that the model size of the conflict model is correct.
+    """Test that the model size of the conflict model is correct.
 
     We expect:
     - Variable count to be equal to the number of items
@@ -142,8 +143,8 @@ def test_model_size_conflict() -> None:
 
 
 def test_step_times() -> None:
-    """
-    Test that the times to solve each step have been added to the solution.
+    """Test that the times to solve each step have been added to the solution.
+
     All times need to be greater than 0.
     """
     solution = (

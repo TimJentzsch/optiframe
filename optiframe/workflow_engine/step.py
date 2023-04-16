@@ -1,3 +1,9 @@
+"""The steps of a workflow.
+
+Steps are executed sequentially in the optimization process.
+Each step can contain multiple tasks, which are ordered based on their dependencies.
+"""
+
 from __future__ import annotations
 
 import inspect
@@ -15,13 +21,17 @@ logger = logging.getLogger(__name__)
 
 @dataclass
 class TaskDependency:
+    """A dependency required by a task, as defined in the `.__init__` method."""
+
     param: str
     annotation: Any
 
     def __repr__(self) -> str:
+        """Get the string representation of a task dependency."""
         return f"{self.param}: {self.annotation.__name__}"
 
     def __str__(self) -> str:
+        """Get a human-readable string of a task dependency."""
         return f"{self.param}: {self.annotation.__name__}"
 
 
@@ -31,8 +41,7 @@ StepData = dict[Any, Any]
 
 
 class Step:
-    """
-    One step in the workflow process.
+    """One step in the workflow process.
 
     Each step is composed of multiple tasks which will be executed within this step.
     Multiple steps are executed sequentially.
@@ -46,8 +55,7 @@ class Step:
         self.tasks = []
 
     def add_task(self, task: Type[Task[Any]]) -> Self:
-        """
-        Register a task to run in this step.
+        """Register a task to run in this step.
 
         :param task: The task to register.
         :return: The same step, to use for function chaining.
@@ -56,10 +64,16 @@ class Step:
         return self
 
     def initialize(self, step_data: StepData) -> InitializedStep:
+        """Initialize a step with data from previous steps.
+
+        This allows data to be passed between steps and be added from the user.
+        """
         return InitializedStep(self, step_data)
 
 
 class InitializedStep:
+    """A step that has been initialized with data."""
+
     step: Step
     step_data: StepData
 
@@ -68,14 +82,15 @@ class InitializedStep:
         self.step_data = step_data
 
     def name(self) -> str:
+        """Get the name of the step."""
         return self.step.name
 
     def tasks(self) -> list[Type[Task[Any]]]:
+        """Get the tasks that have to be executed during this step."""
         return self.step.tasks
 
     def execute(self) -> StepData:
-        """
-        Execute the step by executing the action of all tasks within it.
+        """Execute the step by executing the action of all tasks within it.
 
         The dependencies of each task are injected automatically.
 
@@ -149,8 +164,7 @@ class InitializedStep:
         return self.step_data
 
     def _task_dependencies(self) -> dict[Type[Task[Any]], list[TaskDependency]]:
-        """
-        Determine which task depends on which type of data.
+        """Determine which task depends on which type of data.
 
         :return: For each task, a list of its dependencies.
         """
