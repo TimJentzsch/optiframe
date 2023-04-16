@@ -1,5 +1,4 @@
 from datetime import timedelta
-from typing import Optional
 
 from pulp import LpMaximize
 from pytest import approx
@@ -87,7 +86,7 @@ def test_conflict() -> None:
     assert solution[SolutionData].packed_items == ["kiwi"]
 
 
-def test_model_size_base():
+def test_model_size_base() -> None:
     """
     Test that the model size of the base model is correct.
 
@@ -113,7 +112,7 @@ def test_model_size_base():
     assert solution[ModelSize] == ModelSize(variable_count=2, constraint_count=1)
 
 
-def test_model_size_conflict():
+def test_model_size_conflict() -> None:
     """
     Test that the model size of the conflict model is correct.
 
@@ -142,7 +141,7 @@ def test_model_size_conflict():
     assert solution[ModelSize] == ModelSize(variable_count=3, constraint_count=2)
 
 
-def test_step_times():
+def test_step_times() -> None:
     """
     Test that the times to solve each step have been added to the solution.
     All times need to be greater than 0.
