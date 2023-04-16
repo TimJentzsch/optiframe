@@ -5,7 +5,7 @@ from examples.knapsack.conflict_package import conflict_package, ConflictData
 from examples.knapsack.base_package import BaseData, base_package
 from examples.knapsack.base_package import SolutionData
 from optiframe import SolutionObjValue, Optimizer
-
+from optiframe.framework import ModelSize
 
 base_optimizer = Optimizer("knapsack_base", sense=LpMaximize).add_package(base_package)
 conflict_optimizer = (
@@ -82,3 +82,58 @@ def test_conflict() -> None:
 
     assert solution[SolutionObjValue].objective_value == approx(3.0)
     assert solution[SolutionData].packed_items == ["kiwi"]
+
+
+def test_model_size_base():
+    """
+    Test that the model size of the base model is correct.
+
+    We expect:
+    - Variable count to be equal to the number of items
+    - Constraint count to be 1
+    """
+    solution = (
+        base_optimizer.initialize(
+            BaseData(
+                items=["apple", "banana"],
+                profits={"apple": 1.0, "banana": 2.0},
+                weights={"apple": 1.0, "banana": 1.5},
+                max_weight=2.0,
+            )
+        )
+        .validate()
+        .pre_processing()
+        .build_mip()
+        .print_mip_and_solve()
+    )
+
+    assert solution[ModelSize] == ModelSize(variable_count=2, constraint_count=1)
+
+
+def test_model_size_conflict():
+    """
+    Test that the model size of the conflict model is correct.
+
+    We expect:
+    - Variable count to be equal to the number of items
+    - Constraint count to be 1 + number of conflict pairs
+    """
+    solution = (
+        conflict_optimizer.initialize(
+            BaseData(
+                items=["apple", "banana", "kiwi"],
+                profits={"apple": 2.0, "banana": 2.0, "kiwi": 3.0},
+                weights={"apple": 1.0, "banana": 1.0, "kiwi": 2.0},
+                max_weight=2.0,
+            ),
+            ConflictData(
+                conflicts=[("apple", "banana")],
+            ),
+        )
+        .validate()
+        .pre_processing()
+        .build_mip()
+        .print_mip_and_solve()
+    )
+
+    assert solution[ModelSize] == ModelSize(variable_count=3, constraint_count=2)
