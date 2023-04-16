@@ -5,6 +5,7 @@ from .optimizer import (
     BuiltOptimizer,
     OptimizationPackage,
 )
+from .metrics import ModelSize, StepTimes
 
 __all__ = [
     "Optimizer",
@@ -12,4 +13,6 @@ __all__ = [
     "InitializedOptimizer",
     "BuiltOptimizer",
     "OptimizationPackage",
+    "ModelSize",
+    "StepTimes",
 ]
