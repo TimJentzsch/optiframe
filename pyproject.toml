@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "optiframe"
-version = "0.2.0"
+version = "0.3.0"
 description = "A modular framework for mixed integer programming."
 authors = ["Tim Jentzsch <optiframe.projects@timjen.net>"]
 license = "MIT"
