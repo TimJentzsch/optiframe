@@ -18,7 +18,7 @@ class ModelSize:
 
 @dataclass
 class StepTimes:
-    """The time needed to execute each step of the optimization."""
+    """The time needed to execute each steps of the optimization."""
 
     validate: timedelta
     pre_processing: timedelta
@@ -30,7 +30,7 @@ class StepTimes:
     def total(self) -> timedelta:
         """The total time needed to solve the problem.
 
-        This is the sum of all step times.
+        This is the sum of all steps times.
         """
         return sum(
             [self.validate, self.pre_processing, self.build_mip, self.solve, self.extract_solution],

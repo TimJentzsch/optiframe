@@ -140,7 +140,7 @@ def test_model_size_conflict() -> None:
 
 
 def test_step_times() -> None:
-    """Test that the times to solve each step have been added to the solution.
+    """Test that the times to solve each steps have been added to the solution.
 
     All times need to be greater than 0.
     """

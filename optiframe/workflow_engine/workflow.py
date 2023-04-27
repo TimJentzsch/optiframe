@@ -10,7 +10,7 @@ class Workflow:
     """A complete workflow.
 
     The workflow is composed of steps, which are executed sequentially.
-    Each step is composed of tasks, which can depend on each other.
+    Each steps is composed of tasks, which can depend on each other.
     """
 
     steps: list[Step]
@@ -18,12 +18,14 @@ class Workflow:
     def __init__(self) -> None:
         self.steps = list()
 
-    def add_step(self, step: Step) -> Self:
-        """Add a step to the workflow.
+    def add_steps(self, *steps: Step) -> Self:
+        """Add steps to the workflow.
 
         The order in which the steps are added determines the order in which they are executed.
         """
-        self.steps.append(step)
+        for step in steps:
+            self.steps.append(step)
+
         return self
 
     def initialize(self, *args: Any) -> InitializedWorkflow:
@@ -58,9 +60,9 @@ class InitializedWorkflow:
         return self
 
     def execute_step(self, index: int) -> StepData:
-        """Execute the step at the given index.
+        """Execute the steps at the given index.
 
-        The indexes start at 0, so 0 is the first step.
+        The indexes start at 0, so 0 is the first steps.
         """
         step = self.workflow.steps[index]
         self.step_data = step.initialize(self.step_data).execute()
@@ -69,7 +71,7 @@ class InitializedWorkflow:
     def execute(self) -> StepData:
         """Execute all steps sequentially."""
         for step in self.workflow.steps:
-            # Execute each step sequentially and update the step data
+            # Execute each steps sequentially and update the steps data
             self.step_data = step.initialize(self.step_data).execute()
 
         return self.step_data

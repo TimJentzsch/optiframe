@@ -17,7 +17,7 @@ class TestStepTimes:
     """Tests for the StepTimes metric class."""
 
     def test_total_is_sum_of_all_times(self) -> None:
-        """Test that the total time is the sum of all step times."""
+        """Test that the total time is the sum of all steps times."""
         step_times = StepTimes(
             validate=timedelta(seconds=1),
             pre_processing=timedelta(milliseconds=2),

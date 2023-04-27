@@ -1,4 +1,4 @@
-"""The abstract task types for each optimization step."""
+"""The abstract task types for each optimization steps."""
 import abc
 from typing import TypeVar, Generic
 

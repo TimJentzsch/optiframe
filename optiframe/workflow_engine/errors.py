@@ -13,7 +13,7 @@ class InjectionError(RuntimeError):
 
 
 class ScheduleError(RuntimeError):
-    """The tasks of a step cannot be scheduled.
+    """The tasks of a steps cannot be scheduled.
 
     This can be the case if there are circular or missing dependencies.
     """
