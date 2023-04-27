@@ -33,8 +33,8 @@ def demo() -> None:
     )
 
     # Create an optimizer object with both modules
-    knapsack_optimizer = (
-        Optimizer("knapsack", sense=LpMaximize).add_module(base_module).add_module(conflict_module)
+    knapsack_optimizer = Optimizer("knapsack", sense=LpMaximize).add_modules(
+        base_module, conflict_module
     )
 
     # Try to solve the problem

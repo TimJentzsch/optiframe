@@ -10,11 +10,9 @@ from examples.knapsack.base_module import BaseData, SolutionData, base_module
 from optiframe import SolutionObjValue, Optimizer
 from optiframe.framework import ModelSize, StepTimes
 
-base_optimizer = Optimizer("knapsack_base", sense=LpMaximize).add_module(base_module)
-conflict_optimizer = (
-    Optimizer("knapsack_conflict", sense=LpMaximize)
-    .add_module(base_module)
-    .add_module(conflict_module)
+base_optimizer = Optimizer("knapsack_base", sense=LpMaximize).add_modules(base_module)
+conflict_optimizer = Optimizer("knapsack_conflict", sense=LpMaximize).add_modules(
+    base_module, conflict_module
 )
 
 
@@ -58,7 +56,7 @@ def test_two_items_one_fits() -> None:
 
 
 def test_conflict() -> None:
-    """Test that the conflict module works as expected.
+    """Test that the conflict modules works as expected.
 
     There are three items.
     The first two fit in the knapsack together and would yield the most profit.

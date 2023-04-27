@@ -24,7 +24,7 @@ from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutio
 
 @dataclass
 class OptimizationModule:
-    """A module bundling tasks for each step of the optimization process."""
+    """A modules bundling tasks for each step of the optimization process."""
 
     build_mip: Type[BuildMipTask[Any]]
     validate: Optional[Type[ValidateTask]] = None
@@ -54,13 +54,15 @@ class Optimizer:
         self.sense = sense
         self.modules = []
 
-    def add_module(self, module: OptimizationModule) -> Self:
-        """Add an optimization module to the optimizer.
+    def add_modules(self, *modules: OptimizationModule) -> Self:
+        """Add optimization modules to the optimizer.
 
         The modules implement the entire functionality,
-        without any module, the optimizer doesn't do anything useful.
+        without any modules, the optimizer doesn't do anything useful.
         """
-        self.modules.append(module)
+        for module in modules:
+            self.modules.append(module)
+
         return self
 
     def initialize(self, *data: Any) -> InitializedOptimizer:

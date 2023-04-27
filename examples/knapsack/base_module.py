@@ -1,4 +1,4 @@
-"""The base module for the knapsack problem.
+"""The base modules for the knapsack problem.
 
 Provides the data and functionality that is needed for all problem variations.
 """
@@ -52,14 +52,14 @@ class ValidateBaseData(ValidateTask):
 
 @dataclass
 class BaseMipData:
-    """The variables added by the base module of the knapsack problem."""
+    """The variables added by the base modules of the knapsack problem."""
 
     # Pack the item into the knapsack?
     var_pack_item: dict[str, LpVariable]
 
 
 class BuildBaseMip(BuildMipTask[BaseMipData]):
-    """A task to add the variables and constraints of the base module to the MIP."""
+    """A task to add the variables and constraints of the base modules to the MIP."""
 
     base_data: BaseData
     problem: LpProblem
@@ -69,7 +69,7 @@ class BuildBaseMip(BuildMipTask[BaseMipData]):
         self.problem = problem
 
     def execute(self) -> BaseMipData:
-        """Add the variables and constraints of the base module to the MIP."""
+        """Add the variables and constraints of the base modules to the MIP."""
         # Pack the item into the knapsack?
         var_pack_item = {
             item: LpVariable(f"pack_item({item})", cat=LpBinary) for item in self.base_data.items
