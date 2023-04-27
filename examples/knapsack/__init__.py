@@ -7,9 +7,9 @@ capacity of the knapsack.
 """
 from pulp import LpMaximize
 
-from .base_package import BaseData, SolutionData, base_package
 from optiframe import Optimizer, SolutionObjValue, InfeasibleError
-from .conflict_package import conflict_package, ConflictData
+from .base_module import BaseData, SolutionData, base_module
+from .conflict_module import conflict_module, ConflictData
 
 
 def demo() -> None:
@@ -32,11 +32,9 @@ def demo() -> None:
         conflicts=[(f"item_{i}", f"item_{i + item_count // 2}") for i in range(item_count // 2)]
     )
 
-    # Create an optimizer object with both packages
+    # Create an optimizer object with both modules
     knapsack_optimizer = (
-        Optimizer("knapsack", sense=LpMaximize)
-        .add_package(base_package)
-        .add_package(conflict_package)
+        Optimizer("knapsack", sense=LpMaximize).add_module(base_module).add_module(conflict_module)
     )
 
     # Try to solve the problem

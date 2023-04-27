@@ -5,7 +5,7 @@ from .optimizer import (
     ValidatedOptimizer,
     InitializedOptimizer,
     BuiltOptimizer,
-    OptimizationPackage,
+    OptimizationModule,
 )
 from .metrics import ModelSize, StepTimes
 
@@ -14,7 +14,7 @@ __all__ = [
     "ValidatedOptimizer",
     "InitializedOptimizer",
     "BuiltOptimizer",
-    "OptimizationPackage",
+    "OptimizationModule",
     "ModelSize",
     "StepTimes",
 ]

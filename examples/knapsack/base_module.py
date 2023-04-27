@@ -1,4 +1,4 @@
-"""The base package for the knapsack problem.
+"""The base module for the knapsack problem.
 
 Provides the data and functionality that is needed for all problem variations.
 """
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 from pulp import LpVariable, LpProblem, LpBinary, lpSum
 
-from optiframe.framework import OptimizationPackage
+from optiframe.framework import OptimizationModule
 from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, ValidateTask
 
 
@@ -52,14 +52,14 @@ class ValidateBaseData(ValidateTask):
 
 @dataclass
 class BaseMipData:
-    """The variables added by the base package of the knapsack problem."""
+    """The variables added by the base module of the knapsack problem."""
 
     # Pack the item into the knapsack?
     var_pack_item: dict[str, LpVariable]
 
 
 class BuildBaseMip(BuildMipTask[BaseMipData]):
-    """A task to add the variables and constraints of the base package to the MIP."""
+    """A task to add the variables and constraints of the base module to the MIP."""
 
     base_data: BaseData
     problem: LpProblem
@@ -69,7 +69,7 @@ class BuildBaseMip(BuildMipTask[BaseMipData]):
         self.problem = problem
 
     def execute(self) -> BaseMipData:
-        """Add the variables and constraints of the base package to the MIP."""
+        """Add the variables and constraints of the base module to the MIP."""
         # Pack the item into the knapsack?
         var_pack_item = {
             item: LpVariable(f"pack_item({item})", cat=LpBinary) for item in self.base_data.items
@@ -125,6 +125,6 @@ class ExtractSolution(ExtractSolutionTask[SolutionData]):
         return SolutionData(packed_items)
 
 
-base_package = OptimizationPackage(
+base_module = OptimizationModule(
     validate=ValidateBaseData, build_mip=BuildBaseMip, extract_solution=ExtractSolution
 )
