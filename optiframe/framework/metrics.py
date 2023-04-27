@@ -11,7 +11,7 @@ class ModelSize:
     constraint_count: int
 
     @property
-    def total_size(self) -> int:
+    def total(self) -> int:
         """The total size of the model, i.e. the variable count times the constraint count."""
         return self.variable_count * self.constraint_count
 

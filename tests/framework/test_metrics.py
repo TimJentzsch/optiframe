@@ -10,7 +10,7 @@ class TestModelSize:
     def test_total_size_is_constraints_times_variables(self) -> None:
         """Test that the total size of the model is the constraint count times variable count."""
         model_size = ModelSize(variable_count=3, constraint_count=5)
-        assert model_size.total_size == 15
+        assert model_size.total == 15
 
 
 class TestStepTimes:
