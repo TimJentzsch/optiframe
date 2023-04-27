@@ -5,6 +5,8 @@ from optiframe.framework import ModelSize, StepTimes
 
 
 class TestModelSize:
+    """Tests for the ModelSize metric class."""
+
     def test_total_size_is_constraints_times_variables(self) -> None:
         """Test that the total size of the model is the constraint count times variable count."""
         model_size = ModelSize(variable_count=3, constraint_count=5)
@@ -12,6 +14,8 @@ class TestModelSize:
 
 
 class TestStepTimes:
+    """Tests for the StepTimes metric class."""
+
     def test_total_is_sum_of_all_times(self) -> None:
         """Test that the total time is the sum of all step times."""
         step_times = StepTimes(
