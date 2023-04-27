@@ -18,11 +18,11 @@ high modularity and testability.
     which are automatically injected by the optimizer based on their type annotation.
   - The **execute** method allows you to implement the functionality.
     It may return data which can then be used by other tasks as a dependency.
-- **Packages** combine tasks that belong together.
-    Each package must contain a task for building the MIP and can additionally contain tasks
+- **Modules** combine tasks that belong together.
+    Each module must contain a task for building the MIP and can additionally contain tasks
     for validation, pre-processing and solution extraction.
-    The packages are what makes Optiframe so modular:
-    You can define extensions of a problem in a separate package and only include it if needed.
+    The modules are what makes Optiframe so extendable:
+    You can define extensions of a problem in a separate module and only include it if needed.
 - The **optimizer** allows you to configure the packages that you need.
     Afterwards, you can initialize it with the instance data and then solve the optimization problem.
 

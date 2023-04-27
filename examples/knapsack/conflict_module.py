@@ -1,25 +1,24 @@
-"""A package that allows you to add conflicting items which must not be packed together."""
+"""A module that allows you to add conflicting items which must not be packed together."""
 
 from dataclasses import dataclass
 
 from pulp import LpProblem
 
-from examples.knapsack.base_package import BaseMipData
-from optiframe.framework import OptimizationPackage
-from examples.knapsack.base_package import BaseData
+from examples.knapsack.base_module import BaseData, BaseMipData
+from optiframe.framework import OptimizationModule
 from optiframe.framework.tasks import BuildMipTask, ValidateTask
 
 
 @dataclass
 class ConflictData:
-    """The data required for the conflict package."""
+    """The data required for the conflict module."""
 
     # A list of item pairs which must not be packed together
     conflicts: list[tuple[str, str]]
 
 
 class ValidateConflictData(ValidateTask):
-    """A task to validate that the data of the conflict package is valid."""
+    """A task to validate that the data of the conflict module is valid."""
 
     base_data: BaseData
     conflict_data: ConflictData
@@ -29,7 +28,7 @@ class ValidateConflictData(ValidateTask):
         self.conflict_data = conflict_data
 
     def execute(self) -> None:
-        """Validate the data of the conflict package."""
+        """Validate the data of the conflict module."""
         for item_1, item_2 in self.conflict_data.conflicts:
             assert (
                 item_1 in self.base_data.items
@@ -41,7 +40,7 @@ class ValidateConflictData(ValidateTask):
 
 
 class BuildConflictMip(BuildMipTask[None]):
-    """A task to add the variables and constraints of the conflict package to the MIP."""
+    """A task to add the variables and constraints of the conflict module to the MIP."""
 
     base_data: BaseData
     base_mip_data: BaseMipData
@@ -63,7 +62,7 @@ class BuildConflictMip(BuildMipTask[None]):
         self.problem = problem
 
     def execute(self) -> None:
-        """Add the variables and constraints of the conflict package to the MIP."""
+        """Add the variables and constraints of the conflict module to the MIP."""
         var_pack_item = self.base_mip_data.var_pack_item
 
         # Prevent the conflicting items from being packed together
@@ -71,4 +70,4 @@ class BuildConflictMip(BuildMipTask[None]):
             self.problem += var_pack_item[item_1] + var_pack_item[item_2] <= 1
 
 
-conflict_package = OptimizationPackage(validate=ValidateConflictData, build_mip=BuildConflictMip)
+conflict_module = OptimizationModule(validate=ValidateConflictData, build_mip=BuildConflictMip)

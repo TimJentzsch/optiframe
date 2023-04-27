@@ -23,8 +23,8 @@ from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutio
 
 
 @dataclass
-class OptimizationPackage:
-    """A package bundling tasks for each step of the optimization process."""
+class OptimizationModule:
+    """A module bundling tasks for each step of the optimization process."""
 
     build_mip: Type[BuildMipTask[Any]]
     validate: Optional[Type[ValidateTask]] = None
@@ -35,13 +35,13 @@ class OptimizationPackage:
 class Optimizer:
     """An optimizer for an optimization problem.
 
-    Can be configured by adding optimization packages,
+    Can be configured by adding optimization modules,
     which implement the actual optimization process.
     """
 
     name: str
     sense: LpMinimize | LpMaximize
-    packages: list[OptimizationPackage]
+    modules: list[OptimizationModule]
 
     def __init__(self, name: str, sense: LpMinimize | LpMaximize):
         """Create a new optimizer.
@@ -52,17 +52,21 @@ class Optimizer:
         """
         self.name = name
         self.sense = sense
-        self.packages = []
+        self.modules = []
 
-    def add_package(self, package: OptimizationPackage) -> Self:
-        """Add an optimization package to the optimizer."""
-        self.packages.append(package)
+    def add_module(self, module: OptimizationModule) -> Self:
+        """Add an optimization module to the optimizer.
+
+        The modules implement the entire functionality,
+        without any module, the optimizer doesn't do anything useful.
+        """
+        self.modules.append(module)
         return self
 
     def initialize(self, *data: Any) -> InitializedOptimizer:
         """Initialize the optimizer with the data defining the problem instance.
 
-        Which data classes need to be added here depends on the packages
+        Which data classes need to be added here depends on the modules
         that have been added to the optimizer.
         """
         validate_step = Step("validate")
@@ -71,17 +75,17 @@ class Optimizer:
         solve_step = Step("solve").add_task(SolveTask)
         extract_solution_step = Step("extract_solution").add_task(ExtractSolutionObjValueTask)
 
-        for package in self.packages:
-            if package.validate is not None:
-                validate_step.add_task(package.validate)
+        for module in self.modules:
+            if module.validate is not None:
+                validate_step.add_task(module.validate)
 
-            if package.pre_processing is not None:
-                pre_processing_step.add_task(package.pre_processing)
+            if module.pre_processing is not None:
+                pre_processing_step.add_task(module.pre_processing)
 
-            build_mip_step.add_task(package.build_mip)
+            build_mip_step.add_task(module.build_mip)
 
-            if package.extract_solution is not None:
-                extract_solution_step.add_task(package.extract_solution)
+            if module.extract_solution is not None:
+                extract_solution_step.add_task(module.extract_solution)
 
         workflow = (
             Workflow()
