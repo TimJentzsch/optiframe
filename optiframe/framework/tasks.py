@@ -1,4 +1,4 @@
-"""The abstract task types for each optimization step."""
+"""The abstract task types for each optimization steps."""
 import abc
 from typing import TypeVar, Generic
 
@@ -28,7 +28,7 @@ class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
 class BuildMipTask(Task[T], abc.ABC, Generic[T]):
     """A task to construct (or modify) the mixed integer program.
 
-    This is the central part of the optimization module as it modifies the final result.
+    This is the central part of the optimization modules as it modifies the final result.
     """
 
     pass
