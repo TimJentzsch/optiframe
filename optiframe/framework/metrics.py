@@ -33,12 +33,6 @@ class StepTimes:
         This is the sum of all step times.
         """
         return sum(
-            [
-                self.validate,
-                self.pre_processing,
-                self.build_mip,
-                self.solve,
-                self.extract_solution
-            ],
-            timedelta()
+            [self.validate, self.pre_processing, self.build_mip, self.solve, self.extract_solution],
+            timedelta(),
         )
