@@ -10,6 +10,11 @@ class ModelSize:
     variable_count: int
     constraint_count: int
 
+    @property
+    def total(self) -> int:
+        """The total size of the model, i.e. the variable count times the constraint count."""
+        return self.variable_count * self.constraint_count
+
 
 @dataclass
 class StepTimes:
@@ -20,3 +25,14 @@ class StepTimes:
     build_mip: timedelta
     solve: timedelta
     extract_solution: timedelta
+
+    @property
+    def total(self) -> timedelta:
+        """The total time needed to solve the problem.
+
+        This is the sum of all step times.
+        """
+        return sum(
+            [self.validate, self.pre_processing, self.build_mip, self.solve, self.extract_solution],
+            timedelta(),
+        )
