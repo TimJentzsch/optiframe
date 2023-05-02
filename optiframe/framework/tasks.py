@@ -2,7 +2,7 @@
 import abc
 from typing import Generic, TypeVar
 
-from optiframe import Task
+from optiframe.workflow_engine import Task
 
 T = TypeVar("T")
 
