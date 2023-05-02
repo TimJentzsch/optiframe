@@ -26,7 +26,7 @@ line-length = 100
 
 [tool.ruff]
 line-length = 100
-select = ["E", "F", "D"]
+select = ["E", "F", "D", "I"]
 ignore = [
     # multi-line-summary-second-line
     # Collides with other lint rule and is non-standard
