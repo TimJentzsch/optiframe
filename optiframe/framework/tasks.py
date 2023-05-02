@@ -1,6 +1,6 @@
 """The abstract task types for each optimization steps."""
 import abc
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 from optiframe import Task
 

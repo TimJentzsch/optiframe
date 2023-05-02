@@ -4,22 +4,22 @@ from __future__ import annotations
 import tempfile
 from dataclasses import dataclass
 from datetime import datetime, timedelta
-from typing import Optional, Self, Type, Any
+from typing import Any, Optional, Self, Type
 
-from pulp import LpProblem, LpMinimize, LpMaximize
+from pulp import LpMaximize, LpMinimize, LpProblem
 
 from optiframe.workflow_engine import Step, StepData
-from optiframe.workflow_engine.workflow import Workflow, InitializedWorkflow
+from optiframe.workflow_engine.workflow import InitializedWorkflow, Workflow
 
 from .default_tasks import (
     CreateProblemTask,
-    SolveTask,
-    SolveSettings,
     ExtractSolutionObjValueTask,
     ProblemSettings,
+    SolveSettings,
+    SolveTask,
 )
-from .metrics import StepTimes, ModelSize
-from .tasks import BuildMipTask, ValidateTask, PreProcessingTask, ExtractSolutionTask
+from .metrics import ModelSize, StepTimes
+from .tasks import BuildMipTask, ExtractSolutionTask, PreProcessingTask, ValidateTask
 
 
 @dataclass

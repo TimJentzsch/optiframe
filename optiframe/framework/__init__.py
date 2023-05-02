@@ -1,13 +1,13 @@
 """The optimization framework, utilizing the workflow engine."""
 
+from .metrics import ModelSize, StepTimes
 from .optimizer import (
+    BuiltOptimizer,
+    InitializedOptimizer,
+    OptimizationModule,
     Optimizer,
     ValidatedOptimizer,
-    InitializedOptimizer,
-    BuiltOptimizer,
-    OptimizationModule,
 )
-from .metrics import ModelSize, StepTimes
 
 __all__ = [
     "Optimizer",

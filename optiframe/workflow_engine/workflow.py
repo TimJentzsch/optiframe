@@ -1,7 +1,7 @@
 """Complete workflows, composed of steps which are composed of tasks."""
 from __future__ import annotations
 
-from typing import Self, Any
+from typing import Any, Self
 
 from .step import Step, StepData
 

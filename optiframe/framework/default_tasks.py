@@ -5,7 +5,7 @@ These tasks are added to the steps automatically when constructing the optimizer
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from pulp import LpProblem, LpMinimize, LpAffineExpression, LpStatus, LpMaximize
+from pulp import LpAffineExpression, LpMaximize, LpMinimize, LpProblem, LpStatus
 
 from optiframe.framework.errors import InfeasibleError
 from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask

@@ -5,7 +5,7 @@ Provides the data and functionality that is needed for all problem variations.
 
 from dataclasses import dataclass
 
-from pulp import LpVariable, LpProblem, LpBinary, lpSum
+from pulp import LpBinary, LpProblem, LpVariable, lpSum
 
 from optiframe.framework import OptimizationModule
 from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, ValidateTask
