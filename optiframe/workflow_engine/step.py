@@ -10,11 +10,10 @@ import inspect
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Self, Type, Any
+from typing import Any, Self, Type
 
 from .errors import InjectionError, ScheduleError
 from .task import Task
-
 
 logger = logging.getLogger(__name__)
 

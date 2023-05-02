@@ -1,6 +1,6 @@
 """A task in the workflow which executes a specific action."""
 import abc
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 T = TypeVar("T")
 

@@ -7,9 +7,10 @@ capacity of the knapsack.
 """
 from pulp import LpMaximize
 
-from optiframe import Optimizer, SolutionObjValue, InfeasibleError
+from optiframe import InfeasibleError, Optimizer, SolutionObjValue
+
 from .base_module import BaseData, SolutionData, base_module
-from .conflict_module import conflict_module, ConflictData
+from .conflict_module import ConflictData, conflict_module
 
 
 def demo() -> None:

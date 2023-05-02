@@ -5,9 +5,9 @@ from datetime import timedelta
 from pulp import LpMaximize
 from pytest import approx
 
-from examples.knapsack.conflict_module import conflict_module, ConflictData
 from examples.knapsack.base_module import BaseData, SolutionData, base_module
-from optiframe import SolutionObjValue, Optimizer
+from examples.knapsack.conflict_module import ConflictData, conflict_module
+from optiframe import Optimizer, SolutionObjValue
 from optiframe.framework import ModelSize, StepTimes
 
 base_optimizer = Optimizer("knapsack_base", sense=LpMaximize).add_modules(base_module)
