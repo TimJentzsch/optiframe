@@ -8,7 +8,7 @@ from dataclasses import dataclass
 from pulp import LpBinary, LpProblem, LpVariable, lpSum
 
 from optiframe.framework import OptimizationModule
-from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, ValidateTask
+from optiframe.framework.tasks import MipConstructionTask, SolutionExtractionTask, ValidationTask
 
 
 @dataclass
@@ -30,7 +30,7 @@ class BaseData:
     max_weight: float
 
 
-class ValidateBaseData(ValidateTask):
+class ValidationBaseData(ValidationTask):
     """A task to validation that the knapsack base_data is valid."""
 
     base_data: BaseData
@@ -58,7 +58,7 @@ class BaseMipData:
     var_pack_item: dict[str, LpVariable]
 
 
-class BuildBaseMip(BuildMipTask[BaseMipData]):
+class BaseMipConstruction(MipConstructionTask[BaseMipData]):
     """A task to add the variables and constraints of the base modules to the MIP."""
 
     base_data: BaseData
@@ -99,7 +99,7 @@ class SolutionData:
     packed_items: list[str]
 
 
-class ExtractSolution(ExtractSolutionTask[SolutionData]):
+class SolutionExtraction(SolutionExtractionTask[SolutionData]):
     """A task to extract the solution of the knapsack problem from the variable values."""
 
     base_data: BaseData
@@ -126,5 +126,5 @@ class ExtractSolution(ExtractSolutionTask[SolutionData]):
 
 
 base_module = OptimizationModule(
-    validation=ValidateBaseData, mip_construction=BuildBaseMip, extract_solution=ExtractSolution
+    validation=ValidationBaseData, mip_construction=BaseMipConstruction, extract_solution=SolutionExtraction
 )

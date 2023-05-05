@@ -10,7 +10,7 @@ from pulp import LpAffineExpression, LpMaximize, LpMinimize, LpProblem, LpStatus
 from optiframe.workflow_engine import Task
 
 from .errors import InfeasibleError
-from .tasks import BuildMipTask, ExtractSolutionTask
+from .tasks import MipConstructionTask, SolutionExtractionTask
 
 
 @dataclass
@@ -21,7 +21,7 @@ class ProblemSettings:
     sense: LpMinimize | LpMaximize
 
 
-class CreateProblemTask(BuildMipTask[LpProblem]):
+class CreateProblemTask(MipConstructionTask[LpProblem]):
     """A task to initialize the MIP object."""
 
     problem_settings: ProblemSettings
@@ -77,7 +77,7 @@ class SolutionObjValue:
     objective_value: float
 
 
-class ExtractSolutionObjValueTask(ExtractSolutionTask[SolutionObjValue]):
+class SolutionObjValueExtractionTask(SolutionExtractionTask[SolutionObjValue]):
     """A task to extract the objective value from the solved MIP."""
 
     problem: LpProblem

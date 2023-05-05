@@ -13,23 +13,23 @@ from optiframe.workflow_engine.workflow import InitializedWorkflow, Workflow
 
 from .default_tasks import (
     CreateProblemTask,
-    ExtractSolutionObjValueTask,
+    SolutionObjValueExtractionTask,
     ProblemSettings,
     SolveSettings,
     SolveTask,
 )
 from .metrics import ModelSize, StepTimes
-from .tasks import BuildMipTask, ExtractSolutionTask, PreProcessingTask, ValidateTask
+from .tasks import MipConstructionTask, SolutionExtractionTask, PreProcessingTask, ValidationTask
 
 
 @dataclass
 class OptimizationModule:
     """A modules bundling tasks for each steps of the optimization process."""
 
-    validation: Optional[Type[ValidateTask]] = None
+    validation: Optional[Type[ValidationTask]] = None
     pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
-    mip_construction: Optional[Type[BuildMipTask[Any]]] = None
-    extract_solution: Optional[Type[ExtractSolutionTask[Any]]] = None
+    mip_construction: Optional[Type[MipConstructionTask[Any]]] = None
+    extract_solution: Optional[Type[SolutionExtractionTask[Any]]] = None
 
 
 class Optimizer:
@@ -76,7 +76,7 @@ class Optimizer:
         mip_construction_step = Step("mip_construction").add_tasks(CreateProblemTask)
         solving_step = Step("solving").add_tasks(SolveTask)
         solution_extraction_step = Step("solution_extraction").add_tasks(
-            ExtractSolutionObjValueTask
+            SolutionObjValueExtractionTask
         )
 
         for module in self.modules:
