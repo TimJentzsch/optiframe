@@ -28,7 +28,7 @@ class OptimizationModule:
 
     validate: Optional[Type[ValidateTask]] = None
     pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
-    build_mip: Type[BuildMipTask[Any]] = None
+    build_mip: Optional[Type[BuildMipTask[Any]]] = None
     extract_solution: Optional[Type[ExtractSolutionTask[Any]]] = None
 
 
