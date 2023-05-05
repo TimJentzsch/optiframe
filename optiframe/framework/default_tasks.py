@@ -29,7 +29,7 @@ class CreateProblemTask(MipConstructionTask[LpProblem]):
     def __init__(self, problem_settings: ProblemSettings):
         self.problem_settings = problem_settings
 
-    def execute(self) -> LpProblem:
+    def construct_mip(self) -> LpProblem:
         """Create the `LpProblem` instance to make it available to other tasks."""
         problem = LpProblem(self.problem_settings.name, self.problem_settings.sense)
         # Initialize the objective to an empty expression
@@ -85,7 +85,7 @@ class SolutionObjValueExtractionTask(SolutionExtractionTask[SolutionObjValue]):
     def __init__(self, problem: LpProblem):
         self.problem = problem
 
-    def execute(self) -> SolutionObjValue:
+    def extract_solution(self) -> SolutionObjValue:
         """Extract the objective value from the solved MIP."""
         cost = self.problem.objective.value()
 

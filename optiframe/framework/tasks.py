@@ -13,7 +13,19 @@ class ValidationTask(Task[None], abc.ABC):
     The `execute` method should raise an `AssertionError` if the data is not valid.
     """
 
-    pass
+    def execute(self) -> None:
+        """Execute the task by validating the data."""
+        return self.validate()
+
+    @abc.abstractmethod
+    def validate(self) -> None:
+        """Validate the data for the given module.
+
+        This method should use assertions to perform the validation.
+
+        :raises AssertionError: If the data is not valid.
+        """
+        pass
 
 
 class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
@@ -22,7 +34,14 @@ class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
     This can reduce the total time needed to solve the problem.
     """
 
-    pass
+    def execute(self) -> T:
+        """Execute the task by pre-processing the data."""
+        return self.pre_process()
+
+    @abc.abstractmethod
+    def pre_process(self) -> T:
+        """Apply pre-processing techniques to the data of the problem instance."""
+        pass
 
 
 class MipConstructionTask(Task[T], abc.ABC, Generic[T]):
@@ -31,7 +50,24 @@ class MipConstructionTask(Task[T], abc.ABC, Generic[T]):
     This is the central part of the optimization modules as it modifies the final result.
     """
 
-    pass
+    def execute(self) -> T:
+        """Execute the task by constructing the MIP."""
+        return self.construct_mip()
+
+    @abc.abstractmethod
+    def construct_mip(self) -> T:
+        """Modify the mixed integer program (MIP) to implement new decision criteria.
+
+        You can add additional variables and constraints to modify the optimization.
+        The MIP can be obtained by adding `problem: LpProblem` to the constructor.
+        This will inject the MIP into the task.
+        You can use the usual features of the `pulp` library to modify the MIP.
+
+        If you add new variables to the MIP, you should return a dataclass
+        containing the variables in this method.
+        This allows other tasks to use the variables to define additional constraints.
+        """
+        pass
 
 
 class SolutionExtractionTask(Task[T], abc.ABC):
@@ -40,4 +76,20 @@ class SolutionExtractionTask(Task[T], abc.ABC):
     In this task, variable values can be selected, discarded or aggregated.
     """
 
-    pass
+    def execute(self) -> T:
+        """Execute the task by extracting the solution."""
+        return self.extract_solution()
+
+    @abc.abstractmethod
+    def extract_solution(self) -> T:
+        """Extract the relevant parts of the solution.
+
+        Once the MIP has been solved, the values for all variables are available.
+        Often, these values should be filtered and interpreted to obtain the part
+        relevant for the solution of the problem.
+
+        The solved MIP can be obtained by adding `problem: LpProblem` as parameter
+        to the constructor.
+        The variable values can then be obtained via the functionality of the `pulp` library.
+        """
+        pass
