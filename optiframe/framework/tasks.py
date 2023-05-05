@@ -8,7 +8,7 @@ T = TypeVar("T")
 
 
 class ValidateTask(Task[None], abc.ABC):
-    """A task to validate the data describing the problem instance.
+    """A task to validation the data describing the problem instance.
 
     The `execute` method should raise an `AssertionError` if the data is not valid.
     """

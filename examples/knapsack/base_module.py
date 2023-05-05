@@ -31,7 +31,7 @@ class BaseData:
 
 
 class ValidateBaseData(ValidateTask):
-    """A task to validate that the knapsack base_data is valid."""
+    """A task to validation that the knapsack base_data is valid."""
 
     base_data: BaseData
 
@@ -126,5 +126,5 @@ class ExtractSolution(ExtractSolutionTask[SolutionData]):
 
 
 base_module = OptimizationModule(
-    validate=ValidateBaseData, build_mip=BuildBaseMip, extract_solution=ExtractSolution
+    validation=ValidateBaseData, mip_construction=BuildBaseMip, extract_solution=ExtractSolution
 )

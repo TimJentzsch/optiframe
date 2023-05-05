@@ -26,9 +26,9 @@ from .tasks import BuildMipTask, ExtractSolutionTask, PreProcessingTask, Validat
 class OptimizationModule:
     """A modules bundling tasks for each steps of the optimization process."""
 
-    validate: Optional[Type[ValidateTask]] = None
+    validation: Optional[Type[ValidateTask]] = None
     pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
-    build_mip: Optional[Type[BuildMipTask[Any]]] = None
+    mip_construction: Optional[Type[BuildMipTask[Any]]] = None
     extract_solution: Optional[Type[ExtractSolutionTask[Any]]] = None
 
 
@@ -71,33 +71,35 @@ class Optimizer:
         Which data classes need to be added here depends on the modules
         that have been added to the optimizer.
         """
-        validate_step = Step("validate")
+        validation_step = Step("validation")
         pre_processing_step = Step("pre_processing")
-        build_mip_step = Step("build_mip").add_tasks(CreateProblemTask)
-        solve_step = Step("solve").add_tasks(SolveTask)
-        extract_solution_step = Step("extract_solution").add_tasks(ExtractSolutionObjValueTask)
+        mip_construction_step = Step("mip_construction").add_tasks(CreateProblemTask)
+        solving_step = Step("solving").add_tasks(SolveTask)
+        solution_extraction_step = Step("solution_extraction").add_tasks(
+            ExtractSolutionObjValueTask
+        )
 
         for module in self.modules:
-            if module.validate is not None:
-                validate_step.add_tasks(module.validate)
+            if module.validation is not None:
+                validation_step.add_tasks(module.validation)
 
             if module.pre_processing is not None:
                 pre_processing_step.add_tasks(module.pre_processing)
 
-            if module.build_mip is not None:
-                build_mip_step.add_tasks(module.build_mip)
+            if module.mip_construction is not None:
+                mip_construction_step.add_tasks(module.mip_construction)
 
             if module.extract_solution is not None:
-                extract_solution_step.add_tasks(module.extract_solution)
+                solution_extraction_step.add_tasks(module.extract_solution)
 
         workflow = (
             Workflow()
             .add_steps(
-                validate_step,
+                validation_step,
                 pre_processing_step,
-                build_mip_step,
-                solve_step,
-                extract_solution_step,
+                mip_construction_step,
+                solving_step,
+                solution_extraction_step,
             )
             .initialize(*data)
             .add_data(ProblemSettings(name=self.name, sense=self.sense))

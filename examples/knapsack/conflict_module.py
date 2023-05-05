@@ -18,7 +18,7 @@ class ConflictData:
 
 
 class ValidateConflictData(ValidateTask):
-    """A task to validate that the data of the conflict modules is valid."""
+    """A task to validation that the data of the conflict modules is valid."""
 
     base_data: BaseData
     conflict_data: ConflictData
@@ -70,4 +70,4 @@ class BuildConflictMip(BuildMipTask[None]):
             self.problem += var_pack_item[item_1] + var_pack_item[item_2] <= 1
 
 
-conflict_module = OptimizationModule(validate=ValidateConflictData, build_mip=BuildConflictMip)
+conflict_module = OptimizationModule(validation=ValidateConflictData, mip_construction=BuildConflictMip)
