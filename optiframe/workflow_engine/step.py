@@ -10,7 +10,7 @@ import inspect
 import logging
 from dataclasses import dataclass
 from datetime import datetime
-from typing import Any, Self, Type
+from typing import Any, Self, Type, TypeVar
 
 from .errors import InjectionError, ScheduleError
 from .task import Task
@@ -125,7 +125,7 @@ class InitializedStep:
                         dep.param: self.step_data[dep.annotation] for dep in dependencies[task]
                     }
                     # Determine what type of data is created by the task
-                    data_annotation = inspect.signature(task.execute).return_annotation
+                    data_annotation = task.get_return_type()
 
                     # Instantiate the task, using the data it requires
                     task_obj = task(**dep_data)
@@ -196,3 +196,6 @@ class InitializedStep:
             dependencies[task] = task_dependencies
 
         return dependencies
+
+
+X = TypeVar("X")

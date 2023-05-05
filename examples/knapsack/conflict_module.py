@@ -70,4 +70,6 @@ class ConflictMipConstruction(MipConstructionTask[None]):
             self.problem += var_pack_item[item_1] + var_pack_item[item_2] <= 1
 
 
-conflict_module = OptimizationModule(validation=ValidationConflictData, mip_construction=ConflictMipConstruction)
+conflict_module = OptimizationModule(
+    validation=ValidationConflictData, mip_construction=ConflictMipConstruction
+)

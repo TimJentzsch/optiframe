@@ -13,13 +13,13 @@ from optiframe.workflow_engine.workflow import InitializedWorkflow, Workflow
 
 from .default_tasks import (
     CreateProblemTask,
-    SolutionObjValueExtractionTask,
     ProblemSettings,
+    SolutionObjValueExtractionTask,
     SolveSettings,
     SolveTask,
 )
 from .metrics import ModelSize, StepTimes
-from .tasks import MipConstructionTask, SolutionExtractionTask, PreProcessingTask, ValidationTask
+from .tasks import MipConstructionTask, PreProcessingTask, SolutionExtractionTask, ValidationTask
 
 
 @dataclass

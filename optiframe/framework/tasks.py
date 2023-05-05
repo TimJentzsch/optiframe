@@ -1,6 +1,7 @@
 """The abstract task types for each optimization steps."""
 import abc
-from typing import Generic, TypeVar
+import inspect
+from typing import Any, Generic, TypeVar
 
 from optiframe.workflow_engine import Task
 
@@ -16,6 +17,11 @@ class ValidationTask(Task[None], abc.ABC):
     def execute(self) -> None:
         """Execute the task by validating the data."""
         return self.validate()
+
+    @classmethod
+    def get_return_type(cls) -> Any:
+        """Get the return type of the task."""
+        return inspect.signature(cls.validate).return_annotation
 
     @abc.abstractmethod
     def validate(self) -> None:
@@ -38,6 +44,11 @@ class PreProcessingTask(Task[T], abc.ABC, Generic[T]):
         """Execute the task by pre-processing the data."""
         return self.pre_process()
 
+    @classmethod
+    def get_return_type(cls) -> Any:
+        """Get the return type of the task."""
+        return inspect.signature(cls.pre_process).return_annotation
+
     @abc.abstractmethod
     def pre_process(self) -> T:
         """Apply pre-processing techniques to the data of the problem instance."""
@@ -53,6 +64,11 @@ class MipConstructionTask(Task[T], abc.ABC, Generic[T]):
     def execute(self) -> T:
         """Execute the task by constructing the MIP."""
         return self.construct_mip()
+
+    @classmethod
+    def get_return_type(cls) -> Any:
+        """Get the return type of the task."""
+        return inspect.signature(cls.construct_mip).return_annotation
 
     @abc.abstractmethod
     def construct_mip(self) -> T:
@@ -79,6 +95,11 @@ class SolutionExtractionTask(Task[T], abc.ABC):
     def execute(self) -> T:
         """Execute the task by extracting the solution."""
         return self.extract_solution()
+
+    @classmethod
+    def get_return_type(cls) -> Any:
+        """Get the return type of the task."""
+        return inspect.signature(cls.extract_solution).return_annotation
 
     @abc.abstractmethod
     def extract_solution(self) -> T:

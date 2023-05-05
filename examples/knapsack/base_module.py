@@ -126,5 +126,7 @@ class SolutionExtraction(SolutionExtractionTask[SolutionData]):
 
 
 base_module = OptimizationModule(
-    validation=ValidationBaseData, mip_construction=BaseMipConstruction, extract_solution=SolutionExtraction
+    validation=ValidationBaseData,
+    mip_construction=BaseMipConstruction,
+    extract_solution=SolutionExtraction,
 )
