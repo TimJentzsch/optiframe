@@ -26,9 +26,9 @@ from .tasks import BuildMipTask, ExtractSolutionTask, PreProcessingTask, Validat
 class OptimizationModule:
     """A modules bundling tasks for each steps of the optimization process."""
 
-    build_mip: Type[BuildMipTask[Any]]
     validate: Optional[Type[ValidateTask]] = None
     pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
+    build_mip: Type[BuildMipTask[Any]] = None
     extract_solution: Optional[Type[ExtractSolutionTask[Any]]] = None
 
 
@@ -84,7 +84,8 @@ class Optimizer:
             if module.pre_processing is not None:
                 pre_processing_step.add_tasks(module.pre_processing)
 
-            build_mip_step.add_tasks(module.build_mip)
+            if module.build_mip is not None:
+                build_mip_step.add_tasks(module.build_mip)
 
             if module.extract_solution is not None:
                 extract_solution_step.add_tasks(module.extract_solution)
