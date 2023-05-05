@@ -5,8 +5,7 @@ from dataclasses import dataclass
 from pulp import LpProblem
 
 from examples.knapsack.base_module import BaseData, BaseMipData
-from optiframe.framework import OptimizationModule
-from optiframe.framework.tasks import BuildMipTask, ValidateTask
+from optiframe import MipConstructionTask, OptimizationModule, ValidationTask
 
 
 @dataclass
@@ -17,8 +16,8 @@ class ConflictData:
     conflicts: list[tuple[str, str]]
 
 
-class ValidateConflictData(ValidateTask):
-    """A task to validate that the data of the conflict modules is valid."""
+class ValidationConflictData(ValidationTask):
+    """A task to validation that the data of the conflict modules is valid."""
 
     base_data: BaseData
     conflict_data: ConflictData
@@ -27,7 +26,7 @@ class ValidateConflictData(ValidateTask):
         self.base_data = base_data
         self.conflict_data = conflict_data
 
-    def execute(self) -> None:
+    def validate(self) -> None:
         """Validate the data of the conflict modules."""
         for item_1, item_2 in self.conflict_data.conflicts:
             assert (
@@ -39,7 +38,7 @@ class ValidateConflictData(ValidateTask):
             assert item_1 != item_2, f"Item {item_1} is conflicting with itself"
 
 
-class BuildConflictMip(BuildMipTask[None]):
+class ConflictMipConstruction(MipConstructionTask[None]):
     """A task to add the variables and constraints of the conflict modules to the MIP."""
 
     base_data: BaseData
@@ -61,7 +60,7 @@ class BuildConflictMip(BuildMipTask[None]):
         self.conflict_data = conflict_data
         self.problem = problem
 
-    def execute(self) -> None:
+    def construct_mip(self) -> None:
         """Add the variables and constraints of the conflict modules to the MIP."""
         var_pack_item = self.base_mip_data.var_pack_item
 
@@ -70,4 +69,6 @@ class BuildConflictMip(BuildMipTask[None]):
             self.problem += var_pack_item[item_1] + var_pack_item[item_2] <= 1
 
 
-conflict_module = OptimizationModule(validate=ValidateConflictData, build_mip=BuildConflictMip)
+conflict_module = OptimizationModule(
+    validation=ValidationConflictData, mip_construction=ConflictMipConstruction
+)

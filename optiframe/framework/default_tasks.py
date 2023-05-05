@@ -10,7 +10,7 @@ from pulp import LpAffineExpression, LpMaximize, LpMinimize, LpProblem, LpStatus
 from optiframe.workflow_engine import Task
 
 from .errors import InfeasibleError
-from .tasks import BuildMipTask, ExtractSolutionTask
+from .tasks import MipConstructionTask, SolutionExtractionTask
 
 
 @dataclass
@@ -21,7 +21,7 @@ class ProblemSettings:
     sense: LpMinimize | LpMaximize
 
 
-class CreateProblemTask(BuildMipTask[LpProblem]):
+class CreateProblemTask(MipConstructionTask[LpProblem]):
     """A task to initialize the MIP object."""
 
     problem_settings: ProblemSettings
@@ -29,7 +29,7 @@ class CreateProblemTask(BuildMipTask[LpProblem]):
     def __init__(self, problem_settings: ProblemSettings):
         self.problem_settings = problem_settings
 
-    def execute(self) -> LpProblem:
+    def construct_mip(self) -> LpProblem:
         """Create the `LpProblem` instance to make it available to other tasks."""
         problem = LpProblem(self.problem_settings.name, self.problem_settings.sense)
         # Initialize the objective to an empty expression
@@ -77,7 +77,7 @@ class SolutionObjValue:
     objective_value: float
 
 
-class ExtractSolutionObjValueTask(ExtractSolutionTask[SolutionObjValue]):
+class SolutionObjValueExtractionTask(SolutionExtractionTask[SolutionObjValue]):
     """A task to extract the objective value from the solved MIP."""
 
     problem: LpProblem
@@ -85,7 +85,7 @@ class ExtractSolutionObjValueTask(ExtractSolutionTask[SolutionObjValue]):
     def __init__(self, problem: LpProblem):
         self.problem = problem
 
-    def execute(self) -> SolutionObjValue:
+    def extract_solution(self) -> SolutionObjValue:
         """Extract the objective value from the solved MIP."""
         cost = self.problem.objective.value()
 

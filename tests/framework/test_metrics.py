@@ -1,7 +1,7 @@
 """Tests for the metric classes of the framework."""
 from datetime import timedelta
 
-from optiframe.framework import ModelSize, StepTimes
+from optiframe import ModelSize, StepTimes
 
 
 class TestModelSize:

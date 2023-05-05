@@ -7,8 +7,12 @@ from dataclasses import dataclass
 
 from pulp import LpBinary, LpProblem, LpVariable, lpSum
 
-from optiframe.framework import OptimizationModule
-from optiframe.framework.tasks import BuildMipTask, ExtractSolutionTask, ValidateTask
+from optiframe import (
+    MipConstructionTask,
+    OptimizationModule,
+    SolutionExtractionTask,
+    ValidationTask,
+)
 
 
 @dataclass
@@ -30,15 +34,15 @@ class BaseData:
     max_weight: float
 
 
-class ValidateBaseData(ValidateTask):
-    """A task to validate that the knapsack base_data is valid."""
+class ValidationBaseData(ValidationTask):
+    """A task to validation that the knapsack base_data is valid."""
 
     base_data: BaseData
 
     def __init__(self, base_data: BaseData):
         self.base_data = base_data
 
-    def execute(self) -> None:
+    def validate(self) -> None:
         """Validate the base data of the knapsack problem."""
         for item in self.base_data.items:
             assert item in self.base_data.profits.keys(), f"No profit defined for item {item}"
@@ -58,7 +62,7 @@ class BaseMipData:
     var_pack_item: dict[str, LpVariable]
 
 
-class BuildBaseMip(BuildMipTask[BaseMipData]):
+class BaseMipConstruction(MipConstructionTask[BaseMipData]):
     """A task to add the variables and constraints of the base modules to the MIP."""
 
     base_data: BaseData
@@ -68,7 +72,7 @@ class BuildBaseMip(BuildMipTask[BaseMipData]):
         self.base_data = base_data
         self.problem = problem
 
-    def execute(self) -> BaseMipData:
+    def construct_mip(self) -> BaseMipData:
         """Add the variables and constraints of the base modules to the MIP."""
         # Pack the item into the knapsack?
         var_pack_item = {
@@ -99,7 +103,7 @@ class SolutionData:
     packed_items: list[str]
 
 
-class ExtractSolution(ExtractSolutionTask[SolutionData]):
+class SolutionExtraction(SolutionExtractionTask[SolutionData]):
     """A task to extract the solution of the knapsack problem from the variable values."""
 
     base_data: BaseData
@@ -111,7 +115,7 @@ class ExtractSolution(ExtractSolutionTask[SolutionData]):
         self.problem = problem
         self.base_mip_data = base_mip_data
 
-    def execute(self) -> SolutionData:
+    def extract_solution(self) -> SolutionData:
         """Extract the solution of the knapsack problem from the variable values."""
         packed_items = []
 
@@ -126,5 +130,7 @@ class ExtractSolution(ExtractSolutionTask[SolutionData]):
 
 
 base_module = OptimizationModule(
-    validate=ValidateBaseData, build_mip=BuildBaseMip, extract_solution=ExtractSolution
+    validation=ValidationBaseData,
+    mip_construction=BaseMipConstruction,
+    solution_extraction=SolutionExtraction,
 )
