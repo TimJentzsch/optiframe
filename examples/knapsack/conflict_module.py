@@ -5,8 +5,7 @@ from dataclasses import dataclass
 from pulp import LpProblem
 
 from examples.knapsack.base_module import BaseData, BaseMipData
-from optiframe.framework import OptimizationModule
-from optiframe.framework.tasks import MipConstructionTask, ValidationTask
+from optiframe import MipConstructionTask, OptimizationModule, ValidationTask
 
 
 @dataclass

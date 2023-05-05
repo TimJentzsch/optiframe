@@ -7,8 +7,12 @@ from dataclasses import dataclass
 
 from pulp import LpBinary, LpProblem, LpVariable, lpSum
 
-from optiframe.framework import OptimizationModule
-from optiframe.framework.tasks import MipConstructionTask, SolutionExtractionTask, ValidationTask
+from optiframe import (
+    MipConstructionTask,
+    OptimizationModule,
+    SolutionExtractionTask,
+    ValidationTask,
+)
 
 
 @dataclass

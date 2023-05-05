@@ -3,7 +3,7 @@ import abc
 import inspect
 from typing import Any, TypeVar
 
-from optiframe import Task
+from optiframe.workflow_engine import Task
 
 
 class TestGetReturnType:

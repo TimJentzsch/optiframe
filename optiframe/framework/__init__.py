@@ -8,6 +8,7 @@ from .optimizer import (
     Optimizer,
     ValidatedOptimizer,
 )
+from .tasks import MipConstructionTask, PreProcessingTask, SolutionExtractionTask, ValidationTask
 
 __all__ = [
     "Optimizer",
@@ -17,4 +18,8 @@ __all__ = [
     "OptimizationModule",
     "ModelSize",
     "StepTimes",
+    "ValidationTask",
+    "PreProcessingTask",
+    "MipConstructionTask",
+    "SolutionExtractionTask",
 ]
