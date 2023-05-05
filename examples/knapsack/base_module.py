@@ -38,7 +38,7 @@ class ValidationBaseData(ValidationTask):
     def __init__(self, base_data: BaseData):
         self.base_data = base_data
 
-    def execute(self) -> None:
+    def validate(self) -> None:
         """Validate the base data of the knapsack problem."""
         for item in self.base_data.items:
             assert item in self.base_data.profits.keys(), f"No profit defined for item {item}"
@@ -68,7 +68,7 @@ class BaseMipConstruction(MipConstructionTask[BaseMipData]):
         self.base_data = base_data
         self.problem = problem
 
-    def execute(self) -> BaseMipData:
+    def construct_mip(self) -> BaseMipData:
         """Add the variables and constraints of the base modules to the MIP."""
         # Pack the item into the knapsack?
         var_pack_item = {
@@ -111,7 +111,7 @@ class SolutionExtraction(SolutionExtractionTask[SolutionData]):
         self.problem = problem
         self.base_mip_data = base_mip_data
 
-    def execute(self) -> SolutionData:
+    def extract_solution(self) -> SolutionData:
         """Extract the solution of the knapsack problem from the variable values."""
         packed_items = []
 

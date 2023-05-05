@@ -27,7 +27,7 @@ class ValidationConflictData(ValidationTask):
         self.base_data = base_data
         self.conflict_data = conflict_data
 
-    def execute(self) -> None:
+    def validate(self) -> None:
         """Validate the data of the conflict modules."""
         for item_1, item_2 in self.conflict_data.conflicts:
             assert (
@@ -61,7 +61,7 @@ class ConflictMipConstruction(MipConstructionTask[None]):
         self.conflict_data = conflict_data
         self.problem = problem
 
-    def execute(self) -> None:
+    def construct_mip(self) -> None:
         """Add the variables and constraints of the conflict modules to the MIP."""
         var_pack_item = self.base_mip_data.var_pack_item
 
