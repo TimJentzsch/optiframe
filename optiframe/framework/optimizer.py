@@ -29,7 +29,7 @@ class OptimizationModule:
     validation: Optional[Type[ValidationTask]] = None
     pre_processing: Optional[Type[PreProcessingTask[Any]]] = None
     mip_construction: Optional[Type[MipConstructionTask[Any]]] = None
-    extract_solution: Optional[Type[SolutionExtractionTask[Any]]] = None
+    solution_extraction: Optional[Type[SolutionExtractionTask[Any]]] = None
 
 
 class Optimizer:
@@ -89,8 +89,8 @@ class Optimizer:
             if module.mip_construction is not None:
                 mip_construction_step.add_tasks(module.mip_construction)
 
-            if module.extract_solution is not None:
-                solution_extraction_step.add_tasks(module.extract_solution)
+            if module.solution_extraction is not None:
+                solution_extraction_step.add_tasks(module.solution_extraction)
 
         workflow = (
             Workflow()
